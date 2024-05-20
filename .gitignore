@@ -1,0 +1,4 @@
+*.sample
+.git
+*.json
+main
