@@ -61,6 +61,8 @@ int main(int argc, char *argv[])
 
     bool exit = false;
 
+    SDL_Point mousePos;
+
     int x, y;
     bool pieceCaptured = false;
 
@@ -84,18 +86,26 @@ int main(int argc, char *argv[])
                     break;
                 }
 
-                SDL_GetMouseState(&x, &y);
+                SDL_GetMouseState(&mousePos.x, &mousePos.y);
 
-                dest.x = x - (dest.w / 2);
-                dest.y = y - (dest.h / 2);
+                dest.x = mousePos.x - (dest.w / 2);
+                dest.y = mousePos.y - (dest.h / 2);
                 break;
 
             case SDL_MOUSEBUTTONDOWN:
 
-                SDL_GetMouseState(&x, &y);
-                dest.x = x - (dest.w / 2);
-                dest.y = y - (dest.h / 2);
+                SDL_GetMouseState(&mousePos.x, &mousePos.y);
+
+                dest.x = mousePos.x - (dest.w / 2);
+                dest.y = mousePos.y - (dest.h / 2);
+
+                // if (SDL_PointInRect(&mousePos, &dest))
+                // {
+                //     pieceCaptured = !pieceCaptured;
+                // }
+
                 pieceCaptured = !pieceCaptured;
+
                 break;
 
             case SDL_KEYDOWN:
