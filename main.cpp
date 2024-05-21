@@ -40,14 +40,11 @@ int main(int argc, char *argv[])
     SDL_Rect dest;
     SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h); // connects dest with texture
 
-    // dest.w /= 6;
-    // dest.h /= 6;
-
     dest.x = (600 - dest.w) / 2;
     dest.y = (400 - dest.h) / 2;
 
-    dest.w = 250;
-    dest.h = 200;
+    dest.w = 50;
+    dest.h = 50;
     ///
     /// Section 4: SDL ttf and rendering text
     ///
@@ -63,7 +60,6 @@ int main(int argc, char *argv[])
 
     SDL_Point mousePos;
 
-    int x, y;
     bool pieceCaptured = false;
 
     while (!exit)
@@ -96,15 +92,14 @@ int main(int argc, char *argv[])
 
                 SDL_GetMouseState(&mousePos.x, &mousePos.y);
 
-                dest.x = mousePos.x - (dest.w / 2);
-                dest.y = mousePos.y - (dest.h / 2);
-
-                // if (SDL_PointInRect(&mousePos, &dest))
-                // {
-                //     pieceCaptured = !pieceCaptured;
-                // }
-
-                pieceCaptured = !pieceCaptured;
+                if (SDL_PointInRect(&mousePos, &dest))
+                {
+                    std::cout << "Point in rect" << std::endl;
+                    pieceCaptured = !pieceCaptured;
+                    dest.x = mousePos.x - (dest.w / 2);
+                    dest.y = mousePos.y - (dest.h / 2);
+                    break;
+                }
 
                 break;
 
