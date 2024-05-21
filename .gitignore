@@ -1,5 +1,6 @@
 *.sample
 .git
-*.json
+c_cpp_properties.json
+launch.json
 main
 1690142532495099.jpg
