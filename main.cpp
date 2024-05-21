@@ -14,47 +14,35 @@ int main(int argc, char *argv[])
         printf("error initializing SDL: %s\n", SDL_GetError());
         return 1;
     }
+
+    int WINDOW_WIDTH = 600, WINDOW_HEIGHT = 400;
+
     SDL_Window *win = SDL_CreateWindow("GAME", // creates a window
                                        SDL_WINDOWPOS_CENTERED,
                                        SDL_WINDOWPOS_CENTERED,
-                                       600, 400, 0);
+                                       WINDOW_WIDTH, WINDOW_HEIGHT, 0);
 
     // triggers the program that controls
     // your graphics hardware and sets flags
     Uint32 render_flags = SDL_RENDERER_ACCELERATED;
+
     int SDL_CAPTUREMouse(SDL_ENABLE);
 
-    // creates a renderer to render our images
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
 
-    ///
-    /// Section 2: SDL image loader
-    ///
     SDL_Surface *surface;
     surface = IMG_Load("capybara.png");
-
     SDL_Texture *tex = SDL_CreateTextureFromSurface(rend, surface);
-
     SDL_FreeSurface(surface); // clear surface texture
 
     SDL_Rect dest;
     SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h); // connects dest with texture
 
-    dest.x = (600 - dest.w) / 2;
-    dest.y = (400 - dest.h) / 2;
+    dest.x = 0;
+    dest.y = 0;
 
     dest.w = 50;
     dest.h = 50;
-    ///
-    /// Section 4: SDL ttf and rendering text
-    ///
-
-    ///
-    /// Section 3: Game Loop and Basic Controls
-    ///
-
-    // We add a delay in order to see that our window
-    // has successfully popped up.
 
     bool exit = false;
 
