@@ -9,10 +9,15 @@ class ChessPiece
 {
 public:
     bool isGrabbed;
+    int *texturePointer;
+    static int windowWidth;
+    static int windowHeight;
+    SDL_Texture *tex;
     SDL_Rect boundRect;
     ChessPiece(SDL_Renderer *renderer, const char *imagePath, int xPos, int yPos, int width, int height);
 
-    SDL_bool clickedInRect(SDL_Point &p);
+    void updatePosition(int x, int y);
+    SDL_bool clickedInRect(SDL_Point *p);
 };
 
 #endif

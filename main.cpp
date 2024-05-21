@@ -5,9 +5,11 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_mouse.h>
+#include "ChessPieces.h"
 
 int main(int argc, char *argv[])
 {
+
     // returns zero on success else non-zero
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -15,7 +17,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    int WINDOW_WIDTH = 600, WINDOW_HEIGHT = 400;
+    int WINDOW_WIDTH = 600,
+        WINDOW_HEIGHT = 400;
 
     SDL_Window *win = SDL_CreateWindow("GAME", // creates a window
                                        SDL_WINDOWPOS_CENTERED,
@@ -30,19 +33,11 @@ int main(int argc, char *argv[])
 
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
 
-    SDL_Surface *surface;
-    surface = IMG_Load("capybara.png");
-    SDL_Texture *tex = SDL_CreateTextureFromSurface(rend, surface);
-    SDL_FreeSurface(surface); // clear surface texture
+    // Do the same thing with the renderer etc? Stuff that would remain constant across chess pieces
+    ChessPiece::windowWidth = WINDOW_WIDTH;
+    ChessPiece::windowHeight = WINDOW_HEIGHT;
 
-    SDL_Rect dest;
-    SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h); // connects dest with texture
-
-    dest.x = 0;
-    dest.y = 0;
-
-    dest.w = 50;
-    dest.h = 50;
+    auto piece = ChessPiece(rend, "capybara.png", 0, 0, 50, 50);
 
     bool exit = false;
 
@@ -72,20 +67,19 @@ int main(int argc, char *argv[])
 
                 SDL_GetMouseState(&mousePos.x, &mousePos.y);
 
-                dest.x = mousePos.x - (dest.w / 2);
-                dest.y = mousePos.y - (dest.h / 2);
+                piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
+
                 break;
 
             case SDL_MOUSEBUTTONDOWN:
 
                 SDL_GetMouseState(&mousePos.x, &mousePos.y);
 
-                if (SDL_PointInRect(&mousePos, &dest))
+                if (piece.clickedInRect(&mousePos))
                 {
                     std::cout << "Point in rect" << std::endl;
                     pieceCaptured = !pieceCaptured;
-                    dest.x = mousePos.x - (dest.w / 2);
-                    dest.y = mousePos.y - (dest.h / 2);
+                    piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
                 }
 
                 break;
@@ -99,19 +93,19 @@ int main(int argc, char *argv[])
                     break;
 
                 case SDL_SCANCODE_W:
-                    dest.y -= 5;
+                    piece.boundRect.y -= 5;
                     break;
 
                 case SDL_SCANCODE_S:
-                    dest.y += 5;
+                    piece.boundRect.y += 5;
                     break;
 
                 case SDL_SCANCODE_A:
-                    dest.x -= 5;
+                    piece.boundRect.x -= 5;
                     break;
 
                 case SDL_SCANCODE_D:
-                    dest.x += 5;
+                    piece.boundRect.x += 5;
                     break;
                 }
             }
@@ -119,16 +113,12 @@ int main(int argc, char *argv[])
 
         // clears the screen
         SDL_RenderClear(rend);
-        SDL_RenderCopy(rend, tex, NULL, &dest);
+        SDL_RenderCopy(rend, piece.tex, NULL, &piece.boundRect);
 
         // triggers the double buffers
         // for multiple rendering
         SDL_RenderPresent(rend);
     }
-
-    ///
-    /// Section 5: Freeing resources
-    ///
 
     // We destroy our window. We are passing in the pointer
     // that points to the memory allocated by the
