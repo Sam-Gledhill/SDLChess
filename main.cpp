@@ -67,6 +67,7 @@ int main(int argc, char *argv[])
 
                 SDL_GetMouseState(&mousePos.x, &mousePos.y);
 
+                // Set midpoint of image to mouse position
                 piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
 
                 break;
@@ -93,19 +94,19 @@ int main(int argc, char *argv[])
                     break;
 
                 case SDL_SCANCODE_W:
-                    piece.boundRect.y -= 5;
+                    piece.displace(0, -5);
                     break;
 
                 case SDL_SCANCODE_S:
-                    piece.boundRect.y += 5;
+                    piece.displace(0, +5);
                     break;
 
                 case SDL_SCANCODE_A:
-                    piece.boundRect.x -= 5;
+                    piece.displace(-5, 0);
                     break;
 
                 case SDL_SCANCODE_D:
-                    piece.boundRect.x += 5;
+                    piece.displace(+5, 0);
                     break;
                 }
             }
