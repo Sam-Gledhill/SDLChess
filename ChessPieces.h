@@ -17,6 +17,7 @@ public:
     ChessPiece(SDL_Renderer *renderer, const char *imagePath, int xPos, int yPos, int width, int height);
 
     void updatePosition(int x, int y);
+    void displace(int x, int y);
     SDL_bool clickedInRect(SDL_Point *p);
 };
 

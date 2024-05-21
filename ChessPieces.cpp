@@ -34,5 +34,10 @@ SDL_bool ChessPiece::clickedInRect(SDL_Point *p)
     return SDL_PointInRect(p, &boundRect);
 }
 
+void ChessPiece::displace(int x, int y)
+{
+    updatePosition(boundRect.x + x, boundRect.y + y);
+}
+
 int ChessPiece::windowWidth;
 int ChessPiece::windowHeight;
