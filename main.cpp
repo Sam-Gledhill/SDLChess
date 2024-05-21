@@ -1,7 +1,10 @@
 #include <iostream>
+#include <stdint.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_mouse.h>
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +22,7 @@ int main(int argc, char *argv[])
     // triggers the program that controls
     // your graphics hardware and sets flags
     Uint32 render_flags = SDL_RENDERER_ACCELERATED;
+    int SDL_CAPTUREMouse(SDL_ENABLE);
 
     // creates a renderer to render our images
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
@@ -31,7 +35,7 @@ int main(int argc, char *argv[])
 
     SDL_Texture *tex = SDL_CreateTextureFromSurface(rend, surface);
 
-    SDL_FreeSurface(surface); // clear surface texture?
+    SDL_FreeSurface(surface); // clear surface texture
 
     SDL_Rect dest;
     SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h); // connects dest with texture
@@ -42,6 +46,8 @@ int main(int argc, char *argv[])
     dest.x = (600 - dest.w) / 2;
     dest.y = (400 - dest.h) / 2;
 
+    dest.w = 250;
+    dest.h = 200;
     ///
     /// Section 4: SDL ttf and rendering text
     ///
@@ -54,6 +60,9 @@ int main(int argc, char *argv[])
     // has successfully popped up.
 
     bool exit = false;
+
+    int x, y;
+    bool pieceCaptured = false;
 
     while (!exit)
     {
@@ -69,7 +78,28 @@ int main(int argc, char *argv[])
                 exit = true;
                 break;
 
+            case SDL_MOUSEMOTION:
+                if (!pieceCaptured)
+                {
+                    break;
+                }
+
+                SDL_GetMouseState(&x, &y);
+
+                dest.x = x - (dest.w / 2);
+                dest.y = y - (dest.h / 2);
+                break;
+
+            case SDL_MOUSEBUTTONDOWN:
+
+                SDL_GetMouseState(&x, &y);
+                dest.x = x - (dest.w / 2);
+                dest.y = y - (dest.h / 2);
+                pieceCaptured = !pieceCaptured;
+                break;
+
             case SDL_KEYDOWN:
+
                 switch (event.key.keysym.scancode)
                 {
                 case SDL_SCANCODE_ESCAPE:
