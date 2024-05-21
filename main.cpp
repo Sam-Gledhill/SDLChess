@@ -98,7 +98,6 @@ int main(int argc, char *argv[])
                     pieceCaptured = !pieceCaptured;
                     dest.x = mousePos.x - (dest.w / 2);
                     dest.y = mousePos.y - (dest.h / 2);
-                    break;
                 }
 
                 break;
