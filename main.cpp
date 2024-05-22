@@ -6,6 +6,7 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_mouse.h>
 #include "ChessPieces.h"
+#include <vector>
 
 int main(int argc, char *argv[])
 {
@@ -37,8 +38,18 @@ int main(int argc, char *argv[])
     ChessPiece::windowWidth = WINDOW_WIDTH;
     ChessPiece::windowHeight = WINDOW_HEIGHT;
 
-    auto piece = ChessPiece(rend, "capybara.png", 0, 0, 50, 50);
+    std::vector<ChessPiece> chessPieceList;
 
+    int PIECE_SIZE = 50;
+    for (int i = 0; i <= PIECE_SIZE * 8; i += PIECE_SIZE)
+    {
+        chessPieceList.push_back(
+            ChessPiece(rend, "capybara.png", i, 0, PIECE_SIZE, PIECE_SIZE));
+    }
+
+    bool _currentPieceClicked = false;
+
+    bool anyPieceGrabbed = false;
     bool exit = false;
 
     SDL_Point mousePos;
@@ -60,29 +71,51 @@ int main(int argc, char *argv[])
                 break;
 
             case SDL_MOUSEMOTION:
-                if (!pieceCaptured)
+                if (!anyPieceGrabbed)
                 {
                     break;
                 }
 
-                SDL_GetMouseState(&mousePos.x, &mousePos.y);
+                for (ChessPiece &piece : chessPieceList)
+                {
+                    if (!piece.isGrabbed)
+                    {
+                        continue;
+                    }
 
-                // Set midpoint of image to mouse position
-                piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
+                    SDL_GetMouseState(&mousePos.x, &mousePos.y);
 
+                    // Set midpoint of image to mouse position
+                    piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
+
+                    // When grabbed piece updated - break
+                    // break;
+                }
                 break;
 
             case SDL_MOUSEBUTTONDOWN:
 
                 SDL_GetMouseState(&mousePos.x, &mousePos.y);
 
-                if (piece.clickedInRect(&mousePos))
+                // Note use references or piece information doesn't update properly.
+                for (ChessPiece &piece : chessPieceList)
                 {
-                    std::cout << "Point in rect" << std::endl;
-                    pieceCaptured = !pieceCaptured;
-                    piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
-                }
+                    _currentPieceClicked = piece.clickedInRect(&mousePos);
+                    // Can only grab one piece at a time
+                    if (anyPieceGrabbed && !piece.isGrabbed && _currentPieceClicked)
+                    {
+                        std::cout << "Not this piece" << std::endl;
+                    }
 
+                    if (_currentPieceClicked)
+                    {
+                        std::cout << "Piece picked up / Put Down" << std::endl;
+                        piece.isGrabbed = !piece.isGrabbed;
+                        anyPieceGrabbed = bool(piece.isGrabbed);
+                        piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
+                        break;
+                    }
+                }
                 break;
 
             case SDL_KEYDOWN:
@@ -94,19 +127,15 @@ int main(int argc, char *argv[])
                     break;
 
                 case SDL_SCANCODE_W:
-                    piece.displace(0, -5);
                     break;
 
                 case SDL_SCANCODE_S:
-                    piece.displace(0, +5);
                     break;
 
                 case SDL_SCANCODE_A:
-                    piece.displace(-5, 0);
                     break;
 
                 case SDL_SCANCODE_D:
-                    piece.displace(+5, 0);
                     break;
                 }
             }
@@ -114,7 +143,11 @@ int main(int argc, char *argv[])
 
         // clears the screen
         SDL_RenderClear(rend);
-        SDL_RenderCopy(rend, piece.tex, NULL, &piece.boundRect);
+
+        for (ChessPiece &piece : chessPieceList)
+        {
+            SDL_RenderCopy(rend, piece.tex, NULL, &piece.boundRect);
+        }
 
         // triggers the double buffers
         // for multiple rendering
