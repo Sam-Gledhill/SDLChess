@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     ChessPiece::windowHeight = WINDOW_HEIGHT;
 
     std::vector<ChessPiece> chessPieceList;
+    std::vector<std::vector<SDL_Rect>> chessTileList;
 
     int PIECE_SIZE = 50;
     int START = PIECE_SIZE * 3;
@@ -54,6 +55,17 @@ int main(int argc, char *argv[])
             ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE));
         chessPieceList.push_back(
             ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE));
+    }
+
+    std::vector<SDL_Rect> tileColumn;
+    for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
+    {
+        for (int j = 0; j <= WINDOW_HEIGHT - PIECE_SIZE; j += PIECE_SIZE)
+        {
+            tileColumn.push_back(SDL_Rect{i, j, PIECE_SIZE, PIECE_SIZE});
+        }
+        chessTileList.push_back(tileColumn);
+        tileColumn = {};
     }
 
     bool _currentPieceClicked = false;
@@ -146,8 +158,33 @@ int main(int argc, char *argv[])
             }
         }
 
-        // clears the screen
+        // Fills screen with black
+        SDL_SetRenderDrawColor(rend, 0, 0, 0, 1);
         SDL_RenderClear(rend);
+
+        bool flip_colour = false;
+
+        for (std::vector<SDL_Rect> column : chessTileList)
+        {
+            flip_colour = !flip_colour;
+            for (SDL_Rect &tile : column)
+            {
+                if (flip_colour)
+                {
+                    SDL_SetRenderDrawColor(rend, 115, 110, 117, 1);
+                }
+
+                else
+                {
+                    SDL_SetRenderDrawColor(rend, 255, 255, 255, 1);
+                }
+
+                flip_colour = !flip_colour;
+
+                SDL_RenderDrawRect(rend, &tile);
+                SDL_RenderFillRect(rend, &tile);
+            }
+        }
 
         for (ChessPiece &piece : chessPieceList)
         {
