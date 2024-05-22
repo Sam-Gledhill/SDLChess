@@ -56,7 +56,6 @@ SDL_bool ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector
 
         if (SDL_HasIntersection(&boundRect, &otherPiece.boundRect))
         {
-            std::cout << "True" << std::endl;
             return SDL_TRUE;
         }
     }
