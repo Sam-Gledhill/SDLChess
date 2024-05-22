@@ -84,14 +84,14 @@ int main(int argc, char *argv[])
     {
         // For some reason passing the renderer through a local function causes a segfault -so this cannot be abstracted for now.
         chessPieceList.push_back(
-            ChessPiece(rend, "capybara.png", i, 0, PIECE_SIZE, PIECE_SIZE));
+            ChessPiece(rend, "capybara.png", i, 0, PIECE_SIZE, PIECE_SIZE, "black"));
         chessPieceList.push_back(
-            ChessPiece(rend, "capybara.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE));
+            ChessPiece(rend, "capybara.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "black"));
 
         chessPieceList.push_back(
-            ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE));
+            ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white"));
         chessPieceList.push_back(
-            ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE));
+            ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
     }
 
     std::vector<std::vector<SDL_Rect>> chessTileList = initialiseTiles(START, PIECE_SIZE, WINDOW_HEIGHT);

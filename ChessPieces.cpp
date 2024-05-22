@@ -1,6 +1,6 @@
 #include "ChessPieces.h"
 
-ChessPiece::ChessPiece(SDL_Renderer *renderer, const char *imagePath, int xPos, int yPos, int width, int height)
+ChessPiece::ChessPiece(SDL_Renderer *renderer, const char *imagePath, int xPos, int yPos, int width, int height, std::string team)
 {
     SDL_Surface *surface;
     surface = IMG_Load(imagePath);
