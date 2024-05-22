@@ -19,6 +19,7 @@ public:
     void updatePosition(int x, int y);
     void displace(int x, int y);
     SDL_bool clickedInRect(SDL_Point *p);
+    SDL_bool collidingWithOtherPiece(ChessPiece otherPiece);
 };
 
 #endif

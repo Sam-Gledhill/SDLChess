@@ -40,5 +40,10 @@ void ChessPiece::displace(int x, int y)
     updatePosition(boundRect.x + x, boundRect.y + y);
 }
 
+SDL_bool ChessPiece::collidingWithOtherPiece(ChessPiece otherPiece)
+{
+    return SDL_IntersectRect(&boundRect, &otherPiece.boundRect, NULL);
+}
+
 int ChessPiece::windowWidth;
 int ChessPiece::windowHeight;
