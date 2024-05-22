@@ -40,9 +40,28 @@ void ChessPiece::displace(int x, int y)
     updatePosition(boundRect.x + x, boundRect.y + y);
 }
 
-SDL_bool ChessPiece::collidingWithOtherPiece(ChessPiece otherPiece)
+SDL_bool ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector, size_t currentIndex)
 {
-    return SDL_IntersectRect(&boundRect, &otherPiece.boundRect, NULL);
+
+    for (size_t i = 0; i < chessVector.size(); i++)
+    {
+        // Don't compare piece against itself
+        if (i == currentIndex)
+        {
+            continue;
+        }
+
+        // todo: build default constructor so can declare this outside the function
+        ChessPiece otherPiece = chessVector[i];
+
+        if (SDL_HasIntersection(&boundRect, &otherPiece.boundRect))
+        {
+            std::cout << "True" << std::endl;
+            return SDL_TRUE;
+        }
+    }
+
+    return SDL_FALSE;
 }
 
 int ChessPiece::windowWidth;

@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
                     piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
 
                     // When grabbed piece updated - break
-                    // break;
+                    break;
                 }
                 break;
 
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
                     ChessPiece &piece = chessPieceList[i];
                     _currentPieceClicked = piece.clickedInRect(&mousePos);
                     // Can only grab one piece at a time
-                    if (anyPieceGrabbed && !piece.isGrabbed && _currentPieceClicked)
+                    if (anyPieceGrabbed && !piece.isGrabbed && (_currentPieceClicked || piece.collidingWithOtherPiece(chessPieceList, i)))
                     {
                         std::cout << "Not this piece" << std::endl;
                         break;
