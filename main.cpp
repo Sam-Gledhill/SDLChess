@@ -7,6 +7,7 @@
 #include <SDL2/SDL_mouse.h>
 #include "ChessPieces.h"
 #include <vector>
+#include <algorithm>
 
 int main(int argc, char *argv[])
 {
@@ -21,7 +22,7 @@ int main(int argc, char *argv[])
     int WINDOW_WIDTH = 600,
         WINDOW_HEIGHT = 400;
 
-    SDL_Window *win = SDL_CreateWindow("GAME", // creates a window
+    SDL_Window *win = SDL_CreateWindow("Capybara Chess", // creates a window
                                        SDL_WINDOWPOS_CENTERED,
                                        SDL_WINDOWPOS_CENTERED,
                                        WINDOW_WIDTH, WINDOW_HEIGHT, 0);
@@ -97,22 +98,31 @@ int main(int argc, char *argv[])
 
                 SDL_GetMouseState(&mousePos.x, &mousePos.y);
 
-                // Note use references or piece information doesn't update properly.
-                for (ChessPiece &piece : chessPieceList)
+                for (size_t i = 0; i < chessPieceList.size(); i++)
                 {
+
+                    // Use references or piece information doesn't update properly.
+                    ChessPiece &piece = chessPieceList[i];
                     _currentPieceClicked = piece.clickedInRect(&mousePos);
                     // Can only grab one piece at a time
                     if (anyPieceGrabbed && !piece.isGrabbed && _currentPieceClicked)
                     {
                         std::cout << "Not this piece" << std::endl;
+                        break;
                     }
 
                     if (_currentPieceClicked)
                     {
                         std::cout << "Piece picked up / Put Down" << std::endl;
+
                         piece.isGrabbed = !piece.isGrabbed;
                         anyPieceGrabbed = bool(piece.isGrabbed);
+
                         piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
+
+                        // Draws the currently grabbed piece on top of all the others so collision detection works properly
+                        std::iter_swap(chessPieceList.begin() + i, chessPieceList.end() - 1);
+
                         break;
                     }
                 }
