@@ -135,18 +135,6 @@ int main(int argc, char *argv[])
                 case SDL_SCANCODE_ESCAPE:
                     exit = true;
                     break;
-
-                case SDL_SCANCODE_W:
-                    break;
-
-                case SDL_SCANCODE_S:
-                    break;
-
-                case SDL_SCANCODE_A:
-                    break;
-
-                case SDL_SCANCODE_D:
-                    break;
                 }
             }
         }
