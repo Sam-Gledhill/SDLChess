@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    int WINDOW_WIDTH = 600,
+    int WINDOW_WIDTH = 800,
         WINDOW_HEIGHT = 400;
 
     SDL_Window *win = SDL_CreateWindow("Capybara Chess", // creates a window
@@ -42,14 +42,21 @@ int main(int argc, char *argv[])
     std::vector<ChessPiece> chessPieceList;
 
     int PIECE_SIZE = 50;
-    for (int i = 0; i <= PIECE_SIZE * 8; i += PIECE_SIZE)
+    int START = PIECE_SIZE * 3;
+    for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
     {
         chessPieceList.push_back(
             ChessPiece(rend, "capybara.png", i, 0, PIECE_SIZE, PIECE_SIZE));
+        chessPieceList.push_back(
+            ChessPiece(rend, "capybara.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE));
+
+        chessPieceList.push_back(
+            ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE));
+        chessPieceList.push_back(
+            ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE));
     }
 
     bool _currentPieceClicked = false;
-
     bool anyPieceGrabbed = false;
     bool exit = false;
 
