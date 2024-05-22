@@ -6,6 +6,7 @@ ChessPiece::ChessPiece(SDL_Renderer *renderer, const char *imagePath, int xPos, 
     surface = IMG_Load(imagePath);
     tex = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface); // clear surface texture
+    isGrabbed = false;
 
     SDL_QueryTexture(tex, NULL, texturePointer, &boundRect.w, &boundRect.h); // Connects texture to rect
 
