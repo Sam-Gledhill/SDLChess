@@ -160,6 +160,12 @@ int main(int argc, char *argv[])
                     else
                     {
                         piece.updatePosition(tile.x, tile.y);
+
+                        // Bit of a janky way to do it but it works
+                        if (piece.collidingWithOtherPiece(chessPieceList, chessPieceList.size() - 1))
+                        {
+                            piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
+                        }
                     }
 
                     piece.isGrabbed = false;
@@ -242,14 +248,6 @@ int main(int argc, char *argv[])
         SDL_RenderPresent(rend);
     }
 
-    // We destroy our window. We are passing in the pointer
-    // that points to the memory allocated by the
-    // 'SDL_CreateWindow' function. Remember, this is
-    // a 'C-style' API, we don't have destructors.
     SDL_DestroyWindow(win);
-
-    // We safely uninitialize SDL2, that is, we are
-    // taking down the subsystems here before we exit
-    // our program.
     SDL_Quit();
 }
