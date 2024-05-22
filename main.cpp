@@ -9,6 +9,25 @@
 #include <vector>
 #include <algorithm>
 
+std::vector<std::vector<SDL_Rect>> initialiseTiles(int START, int PIECE_SIZE, int WINDOW_HEIGHT)
+{
+
+    std::vector<std::vector<SDL_Rect>> tilevector2d;
+
+    std::vector<SDL_Rect> tileColumn;
+    for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
+    {
+        for (int j = 0; j <= WINDOW_HEIGHT - PIECE_SIZE; j += PIECE_SIZE)
+        {
+            tileColumn.push_back(SDL_Rect{i, j, PIECE_SIZE, PIECE_SIZE});
+        }
+        tilevector2d.push_back(tileColumn);
+        tileColumn = {};
+    }
+
+    return tilevector2d;
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -22,7 +41,7 @@ int main(int argc, char *argv[])
     int WINDOW_WIDTH = 800,
         WINDOW_HEIGHT = 400;
 
-    SDL_Window *win = SDL_CreateWindow("Capybara Chess", // creates a window
+    SDL_Window *win = SDL_CreateWindow("Chess", // creates a window
                                        SDL_WINDOWPOS_CENTERED,
                                        SDL_WINDOWPOS_CENTERED,
                                        WINDOW_WIDTH, WINDOW_HEIGHT, 0);
@@ -39,13 +58,14 @@ int main(int argc, char *argv[])
     ChessPiece::windowWidth = WINDOW_WIDTH;
     ChessPiece::windowHeight = WINDOW_HEIGHT;
 
-    std::vector<ChessPiece> chessPieceList;
-    std::vector<std::vector<SDL_Rect>> chessTileList;
-
     int PIECE_SIZE = 50;
     int START = PIECE_SIZE * 3;
+
+    std::vector<ChessPiece> chessPieceList;
+
     for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
     {
+        // For some reason passing the renderer through a local function causes a segfault -so this cannot be abstracted for now.
         chessPieceList.push_back(
             ChessPiece(rend, "capybara.png", i, 0, PIECE_SIZE, PIECE_SIZE));
         chessPieceList.push_back(
@@ -57,16 +77,7 @@ int main(int argc, char *argv[])
             ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE));
     }
 
-    std::vector<SDL_Rect> tileColumn;
-    for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
-    {
-        for (int j = 0; j <= WINDOW_HEIGHT - PIECE_SIZE; j += PIECE_SIZE)
-        {
-            tileColumn.push_back(SDL_Rect{i, j, PIECE_SIZE, PIECE_SIZE});
-        }
-        chessTileList.push_back(tileColumn);
-        tileColumn = {};
-    }
+    std::vector<std::vector<SDL_Rect>> chessTileList = initialiseTiles(START, PIECE_SIZE, WINDOW_HEIGHT);
 
     bool _currentPieceClicked = false;
     bool anyPieceGrabbed = false;
