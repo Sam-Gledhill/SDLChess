@@ -28,6 +28,22 @@ std::vector<std::vector<SDL_Rect>> initialiseTiles(int START, int PIECE_SIZE, in
     return tilevector2d;
 }
 
+SDL_Rect grabTileUnderCursor(SDL_Point mousePosition, std::vector<std::vector<SDL_Rect>> tileVector2d)
+{
+    for (auto &column : tileVector2d)
+    {
+        for (auto tile : column)
+        {
+            if (SDL_PointInRect(&mousePosition, &tile))
+            {
+                return tile;
+            }
+        }
+    }
+
+    return SDL_Rect{};
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -61,6 +77,7 @@ int main(int argc, char *argv[])
     int PIECE_SIZE = 50;
     int START = PIECE_SIZE * 3;
 
+    // Can maybe have this as a class variable?
     std::vector<ChessPiece> chessPieceList;
 
     for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
@@ -128,32 +145,51 @@ int main(int argc, char *argv[])
 
                 SDL_GetMouseState(&mousePos.x, &mousePos.y);
 
-                for (size_t i = 0; i < chessPieceList.size(); i++)
+                if (anyPieceGrabbed)
                 {
+                    ChessPiece &piece = chessPieceList.back();
+                    SDL_Rect tile = grabTileUnderCursor(mousePos, chessTileList);
 
-                    // Use references or piece information doesn't update properly.
-                    ChessPiece &piece = chessPieceList[i];
-                    _currentPieceClicked = piece.clickedInRect(&mousePos);
-                    // Can only grab one piece at a time
-                    if (anyPieceGrabbed && !piece.isGrabbed && (_currentPieceClicked || piece.collidingWithOtherPiece(chessPieceList, i)))
+                    // If piece is dragged somewhere that is not a tile.
+                    if (SDL_RectEmpty(&tile))
                     {
-                        std::cout << "Not this piece" << std::endl;
                         break;
                     }
 
-                    if (_currentPieceClicked)
+                    piece.updatePosition(tile.x, tile.y);
+                    piece.isGrabbed = false;
+                    anyPieceGrabbed = false;
+                }
+
+                else
+                {
+                    for (size_t i = 0; i < chessPieceList.size(); i++)
                     {
-                        std::cout << "Piece picked up / Put Down" << std::endl;
 
-                        piece.isGrabbed = !piece.isGrabbed;
-                        anyPieceGrabbed = bool(piece.isGrabbed);
+                        // Use references or piece information doesn't update properly.
+                        ChessPiece &piece = chessPieceList[i];
+                        _currentPieceClicked = piece.clickedInRect(&mousePos);
+                        // Can only grab one piece at a time
+                        if (anyPieceGrabbed && !piece.isGrabbed && (_currentPieceClicked || piece.collidingWithOtherPiece(chessPieceList, i)))
+                        {
+                            std::cout << "Not this piece" << std::endl;
+                            break;
+                        }
 
-                        piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
+                        if (_currentPieceClicked)
+                        {
+                            std::cout << "Piece picked up / Put Down" << std::endl;
 
-                        // Draws the currently grabbed piece on top of all the others so collision detection works properly
-                        std::iter_swap(chessPieceList.begin() + i, chessPieceList.end() - 1);
+                            piece.isGrabbed = !piece.isGrabbed;
+                            anyPieceGrabbed = bool(piece.isGrabbed);
 
-                        break;
+                            piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
+
+                            // Draws the currently grabbed piece on top of all the others so collision detection works properly
+                            std::iter_swap(chessPieceList.begin() + i, chessPieceList.end() - 1);
+
+                            break;
+                        }
                     }
                 }
                 break;
