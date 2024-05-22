@@ -9,6 +9,7 @@
 class ChessPiece
 {
 public:
+    SDL_Rect originalTile;
     bool isGrabbed;
     int *texturePointer;
     static int windowWidth;

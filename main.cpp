@@ -153,10 +153,15 @@ int main(int argc, char *argv[])
                     // If piece is dragged somewhere that is not a tile.
                     if (SDL_RectEmpty(&tile))
                     {
-                        break;
+
+                        piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
                     }
 
-                    piece.updatePosition(tile.x, tile.y);
+                    else
+                    {
+                        piece.updatePosition(tile.x, tile.y);
+                    }
+
                     piece.isGrabbed = false;
                     anyPieceGrabbed = false;
                 }
@@ -168,19 +173,13 @@ int main(int argc, char *argv[])
 
                         // Use references or piece information doesn't update properly.
                         ChessPiece &piece = chessPieceList[i];
-                        _currentPieceClicked = piece.clickedInRect(&mousePos);
-                        // Can only grab one piece at a time
-                        if (anyPieceGrabbed && !piece.isGrabbed && (_currentPieceClicked || piece.collidingWithOtherPiece(chessPieceList, i)))
-                        {
-                            std::cout << "Not this piece" << std::endl;
-                            break;
-                        }
 
-                        if (_currentPieceClicked)
+                        if (piece.clickedInRect(&mousePos))
                         {
                             std::cout << "Piece picked up / Put Down" << std::endl;
 
                             piece.isGrabbed = !piece.isGrabbed;
+                            piece.originalTile = grabTileUnderCursor(mousePos, chessTileList);
                             anyPieceGrabbed = bool(piece.isGrabbed);
 
                             piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
