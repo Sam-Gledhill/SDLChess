@@ -219,7 +219,10 @@ int main(int argc, char *argv[])
                         }
                     }
 
-                    piece.isGrabbed = false;
+                    for (ChessPiece &piece : chessPieceList)
+                    {
+                        piece.isGrabbed = false;
+                    }
                     anyPieceGrabbed = false;
                     std::cout << piece.isGrabbed << anyPieceGrabbed << std::endl;
                 }
