@@ -36,6 +36,14 @@ void drawTiles(SDL_Renderer *rend)
     }
 }
 
+void drawChessPieces(SDL_Renderer *rend)
+{
+    for (ChessPiece &piece : ChessPiece::chessPieceVector)
+    {
+        SDL_RenderCopy(rend, piece.tex, NULL, &piece.boundRect);
+    }
+}
+
 int main(int argc, char *argv[])
 {
     // returns zero on success else non-zero
@@ -88,12 +96,7 @@ int main(int argc, char *argv[])
         SDL_RenderClear(rend);
 
         drawTiles(rend);
-
-        // Renders all chess pieces
-        for (ChessPiece &piece : ChessPiece::chessPieceVector)
-        {
-            SDL_RenderCopy(rend, piece.tex, NULL, &piece.boundRect);
-        }
+        drawChessPieces(rend);
 
         // triggers the double buffers
         // for multiple rendering
