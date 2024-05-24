@@ -29,6 +29,8 @@ void ChessPiece::updatePosition(int x, int y)
     {
         boundRect.y = y;
     }
+
+    boundRect.y = y;
 }
 
 SDL_bool ChessPiece::clickedInRect(SDL_Point *p)
