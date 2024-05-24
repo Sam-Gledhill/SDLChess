@@ -3,7 +3,7 @@
 ChessPiece::ChessPiece(SDL_Renderer *renderer, const char *imagePath, int xPos, int yPos, int width, int height, std::string _team)
 {
     SDL_Surface *surface;
-    std::string team = _team;
+    team = _team;
     surface = IMG_Load(imagePath);
     tex = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface); // clear surface texture
