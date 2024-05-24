@@ -23,7 +23,7 @@ public:
     void updatePosition(int x, int y);
     void displace(int x, int y);
     SDL_bool clickedInRect(SDL_Point *p);
-    SDL_bool collidingWithOtherPiece(std::vector<ChessPiece> chessVector, size_t currentIndex);
+    size_t collidingWithOtherPiece(std::vector<ChessPiece> chessVector, size_t currentIndex);
 };
 
 #endif

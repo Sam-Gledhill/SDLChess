@@ -40,7 +40,7 @@ void ChessPiece::displace(int x, int y)
     updatePosition(boundRect.x + x, boundRect.y + y);
 }
 
-SDL_bool ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector, size_t currentIndex)
+size_t ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector, size_t currentIndex)
 {
 
     for (size_t i = 0; i < chessVector.size(); i++)
@@ -56,11 +56,11 @@ SDL_bool ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector
 
         if (SDL_HasIntersection(&boundRect, &otherPiece.boundRect))
         {
-            return SDL_TRUE;
+            return i;
         }
     }
 
-    return SDL_FALSE;
+    return NULL;
 }
 
 int ChessPiece::windowWidth;
