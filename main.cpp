@@ -103,9 +103,26 @@ int main(int argc, char *argv[])
     SDL_Point mousePos;
     SDL_Event event;
     bool pieceCaptured = false;
+    Uint32 before = SDL_GetTicks();
+    Uint32 after = SDL_GetTicks();
+    Uint32 delta;
+
+    float FRAMERATE = 30.0;
 
     while (!exit)
     {
+
+        // after = SDL_GetTicks();
+        // delta = after - before;
+
+        // if (delta < 1000 / FRAMERATE)
+        // {
+        //     continue;
+        // }
+
+        // // std::cout << "escaped at: " << 1000 / delta << std::endl;
+
+        // before = after;
 
         while (SDL_PollEvent(&event))
         {
