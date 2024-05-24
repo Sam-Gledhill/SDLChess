@@ -35,26 +35,7 @@ void EventHandler::handleEvent(SDL_Event &event)
         break;
 
     case SDL_MOUSEMOTION:
-        if (!anyPieceGrabbed)
-        {
-            break;
-        }
-
-        for (ChessPiece &piece : ChessPiece::chessPieceVector)
-        {
-            if (!piece.isGrabbed)
-            {
-                continue;
-            }
-
-            SDL_GetMouseState(&mousePos.x, &mousePos.y);
-
-            // Set midpoint of image to mouse position
-            piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
-
-            // When grabbed piece updated - break
-            break;
-        }
+        EventHandler::handleMouseMotion();
         break;
 
     case SDL_MOUSEBUTTONDOWN:
@@ -140,5 +121,29 @@ void EventHandler::handleEvent(SDL_Event &event)
             break;
         }
     }
+    }
+}
+
+void EventHandler::handleMouseMotion()
+{
+    if (!anyPieceGrabbed)
+    {
+        return;
+    }
+
+    for (ChessPiece &piece : ChessPiece::chessPieceVector)
+    {
+        if (!piece.isGrabbed)
+        {
+            continue;
+        }
+
+        SDL_GetMouseState(&mousePos.x, &mousePos.y);
+
+        // Set midpoint of image to mouse position
+        piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
+
+        // When grabbed piece updated - break
+        break;
     }
 }
