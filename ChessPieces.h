@@ -12,7 +12,7 @@ class ChessPiece
 public:
     static std::vector<ChessPiece> chessPieceVector;
     static std::vector<std::vector<SDL_Rect>> chessTiles2d;
-
+    static void initialiseTiles(int START, int PIECE_SIZE, int WINDOW_HEIGHT);
     std::string team;
     SDL_Rect originalTile;
     bool isGrabbed;

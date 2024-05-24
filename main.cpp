@@ -10,21 +10,6 @@
 #include <algorithm>
 #include "EventHandling.h"
 
-void initialiseTiles(int START, int PIECE_SIZE, int WINDOW_HEIGHT)
-{
-
-    std::vector<SDL_Rect> tileColumn;
-    for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
-    {
-        for (int j = 0; j <= WINDOW_HEIGHT - PIECE_SIZE; j += PIECE_SIZE)
-        {
-            tileColumn.push_back(SDL_Rect{i, j, PIECE_SIZE, PIECE_SIZE});
-        }
-        ChessPiece::chessTiles2d.push_back(tileColumn);
-        tileColumn = {};
-    }
-}
-
 void drawTiles(SDL_Renderer *rend)
 {
     bool flip_colour = false;
@@ -73,17 +58,18 @@ int main(int argc, char *argv[])
     Uint32 render_flags = SDL_RENDERER_ACCELERATED;
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
 
+    int PIECE_SIZE = 50;
+    int START = PIECE_SIZE * 3;
+
     // int SDL_CAPTUREMouse(SDL_ENABLE);
     // Do the same thing with the renderer etc? Stuff that would remain constant across chess pieces
     ChessPiece::windowWidth = WINDOW_WIDTH;
     ChessPiece::windowHeight = WINDOW_HEIGHT;
-
-    int PIECE_SIZE = 50;
-    int START = PIECE_SIZE * 3;
+    ChessPiece::initialiseTiles(START, PIECE_SIZE, WINDOW_HEIGHT);
 
     for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
     {
-        // For some reason passing the renderer through a local function causes a segfault -so this cannot be abstracted for now.
+        // For some reason passing the renderer through a local function causes a segfault here -so this cannot be abstracted for now.
         ChessPiece::chessPieceVector.push_back(
             ChessPiece(rend, "blackpiece.png", i, 0, PIECE_SIZE, PIECE_SIZE, "black"));
         ChessPiece::chessPieceVector.push_back(
@@ -94,8 +80,6 @@ int main(int argc, char *argv[])
         ChessPiece::chessPieceVector.push_back(
             ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
     }
-
-    initialiseTiles(START, PIECE_SIZE, WINDOW_HEIGHT);
 
     bool anyPieceGrabbed = false;
     bool exit = false;

@@ -66,6 +66,21 @@ size_t ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector, 
     return -1;
 }
 
+void ChessPiece::initialiseTiles(int START, int PIECE_SIZE, int WINDOW_HEIGHT)
+{
+
+    std::vector<SDL_Rect> tileColumn;
+    for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
+    {
+        for (int j = 0; j <= WINDOW_HEIGHT - PIECE_SIZE; j += PIECE_SIZE)
+        {
+            tileColumn.push_back(SDL_Rect{i, j, PIECE_SIZE, PIECE_SIZE});
+        }
+        ChessPiece::chessTiles2d.push_back(tileColumn);
+        tileColumn = {};
+    }
+}
+
 int ChessPiece::windowWidth;
 int ChessPiece::windowHeight;
 
