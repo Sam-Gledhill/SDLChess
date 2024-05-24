@@ -212,14 +212,16 @@ int main(int argc, char *argv[])
                             else
                             {
                                 std::cout << "Different team" << std::endl;
-                                chessPieceList.erase(chessPieceList.begin() + index);
                                 piece.updatePosition(tile.x, tile.y);
+                                chessPieceList.erase(chessPieceList.begin() + index);
+                                piece.originalTile = tile;
                             }
                         }
                     }
 
                     piece.isGrabbed = false;
                     anyPieceGrabbed = false;
+                    std::cout << piece.isGrabbed << anyPieceGrabbed << std::endl;
                 }
 
                 else
