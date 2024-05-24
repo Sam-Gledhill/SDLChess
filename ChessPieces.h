@@ -16,6 +16,7 @@ public:
     static void initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_SIZE, int WINDOW_HEIGHT);
 
     std::string team;
+    bool firstTurn;
     SDL_Rect originalTile;
     bool isGrabbed;
     int *texturePointer;

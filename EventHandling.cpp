@@ -58,6 +58,7 @@ void EventHandler::handleMouseButtonDown()
 
     if (anyPieceGrabbed)
     {
+        // Grab final piece in stack. Would've been put there to be drawn on top.
         ChessPiece &piece = ChessPiece::chessPieceVector.back();
 
         // Pass in pointer instead of passing in whole vector
@@ -72,13 +73,33 @@ void EventHandler::handleMouseButtonDown()
         else
         {
             piece.updatePosition(tile.x, tile.y);
-
             // Bit of a janky way to do it but it works
             size_t index = piece.collidingWithOtherPiece(ChessPiece::chessPieceVector, ChessPiece::chessPieceVector.size() - 1);
 
+            int MULT = 1 + piece.firstTurn;
+
+            std::cout << MULT << "" << piece.firstTurn << std::endl;
+
+            bool validBlackY = tile.y == (MULT * 50) + piece.originalTile.y || tile.y == 1 * 50 + piece.originalTile.y;
+            bool validWhiteY = tile.y == (-MULT * 50) + piece.originalTile.y || tile.y == -1 * 50 + piece.originalTile.y;
+
+            if (piece.team == "black" && !(validBlackY && tile.x == piece.originalTile.x))
+            {
+                piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
+            }
+
+            else if (piece.team == "white" && (!validWhiteY && tile.x == piece.originalTile.x))
+            {
+                piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
+            }
+
+            else
+            {
+                piece.firstTurn = false;
+            }
+
             if (index != -1)
             {
-
                 if (piece.team == ChessPiece::chessPieceVector[index].team)
                 {
                     std::cout << "Invalid move" << std::endl;
