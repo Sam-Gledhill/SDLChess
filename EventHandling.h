@@ -15,6 +15,7 @@ public:
     SDL_Rect grabTileUnderCursor(SDL_Point mousePosition);
     void handleMouseMotion();
     void handleEvent(SDL_Event &event);
+    void handleMouseButtonDown();
 };
 
 #endif
