@@ -72,7 +72,6 @@ void drawTiles(SDL_Renderer *rend, std::vector<std::vector<SDL_Rect>> tilevector
 
 int main(int argc, char *argv[])
 {
-
     // returns zero on success else non-zero
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -91,11 +90,9 @@ int main(int argc, char *argv[])
     // triggers the program that controls
     // your graphics hardware and sets flags
     Uint32 render_flags = SDL_RENDERER_ACCELERATED;
-
-    int SDL_CAPTUREMouse(SDL_ENABLE);
-
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, render_flags);
 
+    // int SDL_CAPTUREMouse(SDL_ENABLE);
     // Do the same thing with the renderer etc? Stuff that would remain constant across chess pieces
     ChessPiece::windowWidth = WINDOW_WIDTH;
     ChessPiece::windowHeight = WINDOW_HEIGHT;
@@ -186,6 +183,8 @@ int main(int argc, char *argv[])
                 if (anyPieceGrabbed)
                 {
                     ChessPiece &piece = chessPieceList.back();
+
+                    // Pass in pointer instead of passing in whole vector
                     SDL_Rect tile = grabTileUnderCursor(mousePos, chessTileList);
 
                     // If piece is dragged somewhere that is not a tile.
@@ -234,9 +233,9 @@ int main(int argc, char *argv[])
                         {
                             std::cout << "Piece picked up / Put Down" << std::endl;
 
-                            piece.isGrabbed = !piece.isGrabbed;
+                            piece.isGrabbed = true;
                             piece.originalTile = grabTileUnderCursor(mousePos, chessTileList);
-                            anyPieceGrabbed = bool(piece.isGrabbed);
+                            anyPieceGrabbed = true;
 
                             piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
 
