@@ -105,12 +105,26 @@ void EventHandler::handleMouseButtonDown()
                     std::cout << "Invalid move" << std::endl;
                     piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
                 }
+
                 else
                 {
-                    std::cout << "Piece Captured" << std::endl;
-                    piece.updatePosition(tile.x, tile.y);
-                    ChessPiece::chessPieceVector.erase(ChessPiece::chessPieceVector.begin() + index);
-                    piece.originalTile = tile;
+
+                    bool whiteAttackValid = (tile.y == piece.originalTile.y - 50) && (tile.x == piece.originalTile.x + 50 || tile.x == piece.originalTile.x - 50);
+                    bool blackAttackValid = (tile.y == piece.originalTile.y + 50) && (tile.x == piece.originalTile.x + 50 || tile.x == piece.originalTile.x - 50);
+                    if ((whiteAttackValid && piece.team == "white") || (blackAttackValid && piece.team == "black"))
+                    {
+                        std::cout << "Piece Captured" << std::endl;
+                        piece.updatePosition(tile.x, tile.y);
+                        ChessPiece::chessPieceVector.erase(ChessPiece::chessPieceVector.begin() + index);
+                        piece.originalTile = tile;
+                        piece.firstTurn = false;
+                    }
+
+                    else
+                    {
+                        std::cout << "Move Invalid";
+                        piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
+                    }
                 }
             }
         }
