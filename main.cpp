@@ -199,7 +199,10 @@ int main(int argc, char *argv[])
 
                         // Bit of a janky way to do it but it works
                         size_t index = piece.collidingWithOtherPiece(chessPieceList, chessPieceList.size() - 1);
-                        if (index != NULL)
+
+                        std::cout << index << std::endl;
+
+                        if (index != -1)
                         {
                             std::cout << index << std::endl;
                             std::cout << chessPieceList[index].team << piece.team << std::endl;

@@ -61,7 +61,7 @@ size_t ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector, 
         }
     }
 
-    return NULL;
+    return -1;
 }
 
 int ChessPiece::windowWidth;
