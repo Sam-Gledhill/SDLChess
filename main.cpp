@@ -28,6 +28,22 @@ std::vector<std::vector<SDL_Rect>> initialiseTiles(int START, int PIECE_SIZE, in
     return tilevector2d;
 }
 
+SDL_Rect grabTileUnderCursor(SDL_Point mousePosition, std::vector<std::vector<SDL_Rect>> tileVector2d)
+{
+    for (auto &column : tileVector2d)
+    {
+        for (auto tile : column)
+        {
+            if (SDL_PointInRect(&mousePosition, &tile))
+            {
+                return tile;
+            }
+        }
+    }
+
+    return SDL_Rect{};
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -61,20 +77,21 @@ int main(int argc, char *argv[])
     int PIECE_SIZE = 50;
     int START = PIECE_SIZE * 3;
 
+    // Can maybe have this as a class variable?
     std::vector<ChessPiece> chessPieceList;
 
     for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
     {
         // For some reason passing the renderer through a local function causes a segfault -so this cannot be abstracted for now.
         chessPieceList.push_back(
-            ChessPiece(rend, "capybara.png", i, 0, PIECE_SIZE, PIECE_SIZE));
+            ChessPiece(rend, "capybara.png", i, 0, PIECE_SIZE, PIECE_SIZE, "black"));
         chessPieceList.push_back(
-            ChessPiece(rend, "capybara.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE));
+            ChessPiece(rend, "capybara.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "black"));
 
         chessPieceList.push_back(
-            ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE));
+            ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white"));
         chessPieceList.push_back(
-            ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE));
+            ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
     }
 
     std::vector<std::vector<SDL_Rect>> chessTileList = initialiseTiles(START, PIECE_SIZE, WINDOW_HEIGHT);
@@ -84,13 +101,28 @@ int main(int argc, char *argv[])
     bool exit = false;
 
     SDL_Point mousePos;
+    SDL_Event event;
+    // bool pieceCaptured = false;
+    // Uint32 before = SDL_GetTicks();
+    // Uint32 after = SDL_GetTicks();
+    // Uint32 delta;
 
-    bool pieceCaptured = false;
+    // float FRAMERATE = 30.0;
 
     while (!exit)
     {
 
-        SDL_Event event;
+        // after = SDL_GetTicks();
+        // delta = after - before;
+
+        // if (delta < 1000 / FRAMERATE)
+        // {
+        //     continue;
+        // }
+
+        // // std::cout << "escaped at: " << 1000 / delta << std::endl;
+
+        // before = after;
 
         while (SDL_PollEvent(&event))
         {
@@ -128,32 +160,68 @@ int main(int argc, char *argv[])
 
                 SDL_GetMouseState(&mousePos.x, &mousePos.y);
 
-                for (size_t i = 0; i < chessPieceList.size(); i++)
+                if (anyPieceGrabbed)
                 {
+                    ChessPiece &piece = chessPieceList.back();
+                    SDL_Rect tile = grabTileUnderCursor(mousePos, chessTileList);
 
-                    // Use references or piece information doesn't update properly.
-                    ChessPiece &piece = chessPieceList[i];
-                    _currentPieceClicked = piece.clickedInRect(&mousePos);
-                    // Can only grab one piece at a time
-                    if (anyPieceGrabbed && !piece.isGrabbed && (_currentPieceClicked || piece.collidingWithOtherPiece(chessPieceList, i)))
+                    // If piece is dragged somewhere that is not a tile.
+                    if (SDL_RectEmpty(&tile))
                     {
-                        std::cout << "Not this piece" << std::endl;
-                        break;
+
+                        piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
                     }
 
-                    if (_currentPieceClicked)
+                    else
                     {
-                        std::cout << "Piece picked up / Put Down" << std::endl;
+                        piece.updatePosition(tile.x, tile.y);
 
-                        piece.isGrabbed = !piece.isGrabbed;
-                        anyPieceGrabbed = bool(piece.isGrabbed);
+                        // Bit of a janky way to do it but it works
+                        size_t index = piece.collidingWithOtherPiece(chessPieceList, chessPieceList.size() - 1);
+                        if (index)
+                        {
+                            std::cout << chessPieceList[index].team << piece.team << std::endl;
+                            if (piece.team == chessPieceList[index].team)
+                            {
+                                std::cout << "Same team" << std::endl;
+                                piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
+                            }
+                            else
+                            {
+                                std::cout << "Different team" << std::endl;
+                                chessPieceList.erase(chessPieceList.begin() + index);
+                                piece.updatePosition(tile.x, tile.y);
+                            }
+                        }
+                    }
 
-                        piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
+                    piece.isGrabbed = false;
+                    anyPieceGrabbed = false;
+                }
 
-                        // Draws the currently grabbed piece on top of all the others so collision detection works properly
-                        std::iter_swap(chessPieceList.begin() + i, chessPieceList.end() - 1);
+                else
+                {
+                    for (size_t i = 0; i < chessPieceList.size(); i++)
+                    {
 
-                        break;
+                        // Use references or piece information doesn't update properly.
+                        ChessPiece &piece = chessPieceList[i];
+
+                        if (piece.clickedInRect(&mousePos))
+                        {
+                            std::cout << "Piece picked up / Put Down" << std::endl;
+
+                            piece.isGrabbed = !piece.isGrabbed;
+                            piece.originalTile = grabTileUnderCursor(mousePos, chessTileList);
+                            anyPieceGrabbed = bool(piece.isGrabbed);
+
+                            piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
+
+                            // Draws the currently grabbed piece on top of all the others so collision detection works properly
+                            std::iter_swap(chessPieceList.begin() + i, chessPieceList.end() - 1);
+
+                            break;
+                        }
                     }
                 }
                 break;
@@ -207,14 +275,6 @@ int main(int argc, char *argv[])
         SDL_RenderPresent(rend);
     }
 
-    // We destroy our window. We are passing in the pointer
-    // that points to the memory allocated by the
-    // 'SDL_CreateWindow' function. Remember, this is
-    // a 'C-style' API, we don't have destructors.
     SDL_DestroyWindow(win);
-
-    // We safely uninitialize SDL2, that is, we are
-    // taking down the subsystems here before we exit
-    // our program.
     SDL_Quit();
 }
