@@ -219,6 +219,7 @@ int main(int argc, char *argv[])
                         }
                     }
 
+                    // Bandaid fix for multiple pieces having .isGrabbed true, find out why.
                     for (ChessPiece &piece : chessPieceList)
                     {
                         piece.isGrabbed = false;
