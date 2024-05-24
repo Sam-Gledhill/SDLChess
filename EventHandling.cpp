@@ -25,6 +25,8 @@ SDL_Rect EventHandler::grabTileUnderCursor(SDL_Point mousePosition)
 
 void EventHandler::handleEvent(SDL_Event &event)
 {
+
+    // todo :: abstract the separate parts of this into private functions
     switch (event.type)
     {
 
@@ -81,16 +83,15 @@ void EventHandler::handleEvent(SDL_Event &event)
 
                 if (index != -1)
                 {
-                    std::cout << index << std::endl;
-                    std::cout << ChessPiece::chessPieceVector[index].team << piece.team << std::endl;
+
                     if (piece.team == ChessPiece::chessPieceVector[index].team)
                     {
-                        std::cout << "Same team" << std::endl;
+                        std::cout << "Invalid move" << std::endl;
                         piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
                     }
                     else
                     {
-                        std::cout << "Different team" << std::endl;
+                        std::cout << "Piece Captured" << std::endl;
                         piece.updatePosition(tile.x, tile.y);
                         ChessPiece::chessPieceVector.erase(ChessPiece::chessPieceVector.begin() + index);
                         piece.originalTile = tile;
@@ -104,7 +105,6 @@ void EventHandler::handleEvent(SDL_Event &event)
                 piece.isGrabbed = false;
             }
             anyPieceGrabbed = false;
-            std::cout << piece.isGrabbed << anyPieceGrabbed << std::endl;
         }
 
         else
@@ -117,12 +117,9 @@ void EventHandler::handleEvent(SDL_Event &event)
 
                 if (piece.clickedInRect(&mousePos))
                 {
-                    std::cout << "Piece picked up / Put Down" << std::endl;
-
                     piece.isGrabbed = true;
                     piece.originalTile = grabTileUnderCursor(mousePos);
                     anyPieceGrabbed = true;
-                    std::cout << piece.team << std::endl;
                     piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
 
                     // Draws the currently grabbed piece on top of all the others so collision detection works properly
