@@ -81,6 +81,23 @@ void ChessPiece::initialiseTiles(int START, int PIECE_SIZE, int WINDOW_HEIGHT)
     }
 }
 
+void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_SIZE, int WINDOW_HEIGHT)
+{
+    for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
+    {
+        // For some reason passing the renderer through a local function causes a segfault here -so this cannot be abstracted for now.
+        ChessPiece::chessPieceVector.push_back(
+            ChessPiece(rend, "blackpiece.png", i, 0, PIECE_SIZE, PIECE_SIZE, "black"));
+        ChessPiece::chessPieceVector.push_back(
+            ChessPiece(rend, "blackpiece.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "black"));
+
+        ChessPiece::chessPieceVector.push_back(
+            ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white"));
+        ChessPiece::chessPieceVector.push_back(
+            ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
+    }
+}
+
 int ChessPiece::windowWidth;
 int ChessPiece::windowHeight;
 

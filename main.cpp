@@ -66,20 +66,7 @@ int main(int argc, char *argv[])
     ChessPiece::windowWidth = WINDOW_WIDTH;
     ChessPiece::windowHeight = WINDOW_HEIGHT;
     ChessPiece::initialiseTiles(START, PIECE_SIZE, WINDOW_HEIGHT);
-
-    for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
-    {
-        // For some reason passing the renderer through a local function causes a segfault here -so this cannot be abstracted for now.
-        ChessPiece::chessPieceVector.push_back(
-            ChessPiece(rend, "blackpiece.png", i, 0, PIECE_SIZE, PIECE_SIZE, "black"));
-        ChessPiece::chessPieceVector.push_back(
-            ChessPiece(rend, "blackpiece.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "black"));
-
-        ChessPiece::chessPieceVector.push_back(
-            ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white"));
-        ChessPiece::chessPieceVector.push_back(
-            ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
-    }
+    ChessPiece::initialiseChessPieces(rend, START, PIECE_SIZE, WINDOW_HEIGHT);
 
     bool anyPieceGrabbed = false;
     bool exit = false;
