@@ -108,7 +108,7 @@ void EventHandler::handleMouseButtonDown()
 
                 else
                 {
-
+                    // Sometimes if a piece is captured on first move, pieces can still move two spaces.
                     bool whiteAttackValid = (tile.y == piece.originalTile.y - 50) && (tile.x == piece.originalTile.x + 50 || tile.x == piece.originalTile.x - 50);
                     bool blackAttackValid = (tile.y == piece.originalTile.y + 50) && (tile.x == piece.originalTile.x + 50 || tile.x == piece.originalTile.x - 50);
                     if ((whiteAttackValid && piece.team == "white") || (blackAttackValid && piece.team == "black"))
