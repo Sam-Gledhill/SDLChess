@@ -102,12 +102,12 @@ int main(int argc, char *argv[])
 
     SDL_Point mousePos;
     SDL_Event event;
-    bool pieceCaptured = false;
-    Uint32 before = SDL_GetTicks();
-    Uint32 after = SDL_GetTicks();
-    Uint32 delta;
+    // bool pieceCaptured = false;
+    // Uint32 before = SDL_GetTicks();
+    // Uint32 after = SDL_GetTicks();
+    // Uint32 delta;
 
-    float FRAMERATE = 30.0;
+    // float FRAMERATE = 30.0;
 
     while (!exit)
     {
