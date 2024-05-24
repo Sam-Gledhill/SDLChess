@@ -102,13 +102,14 @@ int main(int argc, char *argv[])
 
     SDL_Event event;
 
-    while (!exit)
+    EventHandler eventHandler = EventHandler();
+
+    while (!eventHandler.exit)
     {
 
         while (SDL_PollEvent(&event))
         {
-            break;
-            // eventHandler.handleEvent(event);
+            eventHandler.handleEvent(event);
         }
 
         // Fills screen with black
