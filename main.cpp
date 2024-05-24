@@ -107,14 +107,14 @@ int main(int argc, char *argv[])
     {
         // For some reason passing the renderer through a local function causes a segfault -so this cannot be abstracted for now.
         chessPieceList.push_back(
-            ChessPiece(rend, "capybara.png", i, 0, PIECE_SIZE, PIECE_SIZE, "black"));
+            ChessPiece(rend, "blackpiece.png", i, 0, PIECE_SIZE, PIECE_SIZE, "black"));
         chessPieceList.push_back(
-            ChessPiece(rend, "capybara.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "black"));
+            ChessPiece(rend, "blackpiece.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "black"));
 
         chessPieceList.push_back(
-            ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white"));
+            ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white"));
         chessPieceList.push_back(
-            ChessPiece(rend, "capybara.png", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
+            ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
     }
 
     std::vector<std::vector<SDL_Rect>> chessTileList = initialiseTiles(START, PIECE_SIZE, WINDOW_HEIGHT);
@@ -190,7 +190,6 @@ int main(int argc, char *argv[])
                     // If piece is dragged somewhere that is not a tile.
                     if (SDL_RectEmpty(&tile))
                     {
-
                         piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
                     }
 
@@ -200,8 +199,9 @@ int main(int argc, char *argv[])
 
                         // Bit of a janky way to do it but it works
                         size_t index = piece.collidingWithOtherPiece(chessPieceList, chessPieceList.size() - 1);
-                        if (index)
+                        if (index != NULL)
                         {
+                            std::cout << index << std::endl;
                             std::cout << chessPieceList[index].team << piece.team << std::endl;
                             if (piece.team == chessPieceList[index].team)
                             {
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
                             piece.isGrabbed = true;
                             piece.originalTile = grabTileUnderCursor(mousePos, chessTileList);
                             anyPieceGrabbed = true;
-
+                            std::cout << piece.team << std::endl;
                             piece.updatePosition(mousePos.x - (piece.boundRect.w / 2), mousePos.y - (piece.boundRect.h / 2));
 
                             // Draws the currently grabbed piece on top of all the others so collision detection works properly
