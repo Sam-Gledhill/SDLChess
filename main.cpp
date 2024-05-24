@@ -44,6 +44,32 @@ SDL_Rect grabTileUnderCursor(SDL_Point mousePosition, std::vector<std::vector<SD
     return SDL_Rect{};
 }
 
+void drawTiles(SDL_Renderer *rend, std::vector<std::vector<SDL_Rect>> tilevector2d)
+{
+    bool flip_colour = false;
+    for (std::vector<SDL_Rect> column : tilevector2d)
+    {
+        flip_colour = !flip_colour;
+        for (SDL_Rect &tile : column)
+        {
+            if (flip_colour)
+            {
+                SDL_SetRenderDrawColor(rend, 115, 110, 117, 1);
+            }
+
+            else
+            {
+                SDL_SetRenderDrawColor(rend, 255, 255, 255, 1);
+            }
+
+            flip_colour = !flip_colour;
+
+            SDL_RenderDrawRect(rend, &tile);
+            SDL_RenderFillRect(rend, &tile);
+        }
+    }
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -114,14 +140,11 @@ int main(int argc, char *argv[])
 
         // after = SDL_GetTicks();
         // delta = after - before;
-
         // if (delta < 1000 / FRAMERATE)
         // {
         //     continue;
         // }
-
         // // std::cout << "escaped at: " << 1000 / delta << std::endl;
-
         // before = after;
 
         while (SDL_PollEvent(&event))
@@ -241,29 +264,7 @@ int main(int argc, char *argv[])
         SDL_SetRenderDrawColor(rend, 0, 0, 0, 1);
         SDL_RenderClear(rend);
 
-        bool flip_colour = false;
-
-        for (std::vector<SDL_Rect> column : chessTileList)
-        {
-            flip_colour = !flip_colour;
-            for (SDL_Rect &tile : column)
-            {
-                if (flip_colour)
-                {
-                    SDL_SetRenderDrawColor(rend, 115, 110, 117, 1);
-                }
-
-                else
-                {
-                    SDL_SetRenderDrawColor(rend, 255, 255, 255, 1);
-                }
-
-                flip_colour = !flip_colour;
-
-                SDL_RenderDrawRect(rend, &tile);
-                SDL_RenderFillRect(rend, &tile);
-            }
-        }
+        drawTiles(rend, chessTileList);
 
         for (ChessPiece &piece : chessPieceList)
         {
