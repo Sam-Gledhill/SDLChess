@@ -180,6 +180,7 @@ int main(int argc, char *argv[])
                         size_t index = piece.collidingWithOtherPiece(chessPieceList, chessPieceList.size() - 1);
                         if (index)
                         {
+                            std::cout << chessPieceList[index].team << piece.team << std::endl;
                             if (piece.team == chessPieceList[index].team)
                             {
                                 std::cout << "Same team" << std::endl;
@@ -187,7 +188,9 @@ int main(int argc, char *argv[])
                             }
                             else
                             {
+                                std::cout << "Different team" << std::endl;
                                 chessPieceList.erase(chessPieceList.begin() + index);
+                                piece.updatePosition(tile.x, tile.y);
                             }
                         }
                     }
