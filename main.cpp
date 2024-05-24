@@ -101,13 +101,11 @@ int main(int argc, char *argv[])
     bool exit = false;
 
     SDL_Point mousePos;
-
+    SDL_Event event;
     bool pieceCaptured = false;
 
     while (!exit)
     {
-
-        SDL_Event event;
 
         while (SDL_PollEvent(&event))
         {
@@ -162,9 +160,18 @@ int main(int argc, char *argv[])
                         piece.updatePosition(tile.x, tile.y);
 
                         // Bit of a janky way to do it but it works
-                        if (piece.collidingWithOtherPiece(chessPieceList, chessPieceList.size() - 1))
+                        size_t index = piece.collidingWithOtherPiece(chessPieceList, chessPieceList.size() - 1);
+                        if (index)
                         {
-                            piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
+                            if (piece.team == chessPieceList[index].team)
+                            {
+                                std::cout << "Same team" << std::endl;
+                                piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
+                            }
+                            else
+                            {
+                                chessPieceList.erase(chessPieceList.begin() + index);
+                            }
                         }
                     }
 
