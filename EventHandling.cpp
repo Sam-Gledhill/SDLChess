@@ -44,11 +44,9 @@ void EventHandler::handleEvent(SDL_Event &event)
 
     case SDL_KEYDOWN:
     {
-        switch (event.key.keysym.scancode)
+        if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
         {
-        case SDL_SCANCODE_ESCAPE:
             exit = true;
-            break;
         }
     }
     }
