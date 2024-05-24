@@ -18,7 +18,7 @@ public:
     static int windowHeight;
     SDL_Texture *tex;
     SDL_Rect boundRect;
-    ChessPiece(SDL_Renderer *renderer, const char *imagePath, int xPos, int yPos, int width, int height, std::string team);
+    ChessPiece(SDL_Renderer *renderer, const char *imagePath, int xPos, int yPos, int width, int height, std::string _team);
 
     void updatePosition(int x, int y);
     void displace(int x, int y);
