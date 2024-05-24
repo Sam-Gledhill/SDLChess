@@ -9,6 +9,7 @@
                 "-g",
                 "main.cpp",
                 "ChessPieces.cpp",
+                "EventHandling.cpp",
                 "-o",
                 "main",
                 "-lSDL2",

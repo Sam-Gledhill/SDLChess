@@ -66,5 +66,40 @@ size_t ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector, 
     return -1;
 }
 
+void ChessPiece::initialiseTiles(int START, int PIECE_SIZE, int WINDOW_HEIGHT)
+{
+
+    std::vector<SDL_Rect> tileColumn;
+    for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
+    {
+        for (int j = 0; j <= WINDOW_HEIGHT - PIECE_SIZE; j += PIECE_SIZE)
+        {
+            tileColumn.push_back(SDL_Rect{i, j, PIECE_SIZE, PIECE_SIZE});
+        }
+        ChessPiece::chessTiles2d.push_back(tileColumn);
+        tileColumn = {};
+    }
+}
+
+void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_SIZE, int WINDOW_HEIGHT)
+{
+    for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
+    {
+        // For some reason passing the renderer through a local function causes a segfault here -so this cannot be abstracted for now.
+        ChessPiece::chessPieceVector.push_back(
+            ChessPiece(rend, "blackpiece.png", i, 0, PIECE_SIZE, PIECE_SIZE, "black"));
+        ChessPiece::chessPieceVector.push_back(
+            ChessPiece(rend, "blackpiece.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "black"));
+
+        ChessPiece::chessPieceVector.push_back(
+            ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white"));
+        ChessPiece::chessPieceVector.push_back(
+            ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
+    }
+}
+
 int ChessPiece::windowWidth;
 int ChessPiece::windowHeight;
+
+std::vector<ChessPiece> ChessPiece::chessPieceVector{};
+std::vector<std::vector<SDL_Rect>> ChessPiece::chessTiles2d{};
