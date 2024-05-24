@@ -264,8 +264,10 @@ int main(int argc, char *argv[])
         SDL_SetRenderDrawColor(rend, 0, 0, 0, 1);
         SDL_RenderClear(rend);
 
+        // Refactor this to pass in a pointer to the list
         drawTiles(rend, chessTileList);
 
+        // Renders all chess pieces
         for (ChessPiece &piece : chessPieceList)
         {
             SDL_RenderCopy(rend, piece.tex, NULL, &piece.boundRect);
