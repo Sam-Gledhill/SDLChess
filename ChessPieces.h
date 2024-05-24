@@ -10,6 +10,9 @@
 class ChessPiece
 {
 public:
+    static std::vector<ChessPiece> chessPieceVector;
+    static std::vector<std::vector<SDL_Rect>> chessTiles2d;
+
     std::string team;
     SDL_Rect originalTile;
     bool isGrabbed;

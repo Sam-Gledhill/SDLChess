@@ -68,3 +68,6 @@ size_t ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector, 
 
 int ChessPiece::windowWidth;
 int ChessPiece::windowHeight;
+
+std::vector<ChessPiece> ChessPiece::chessPieceVector{};
+std::vector<std::vector<SDL_Rect>> ChessPiece::chessTiles2d{};
