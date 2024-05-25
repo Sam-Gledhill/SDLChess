@@ -20,6 +20,7 @@ public:
     std::string type;
     static bool pawnMoveValid(ChessPiece &Piece, SDL_Rect currentTile);
     static bool rookMoveValid(ChessPiece &Piece, SDL_Rect currentTile);
+    static bool bishopMoveValid(ChessPiece &piece, SDL_Rect currentTile);
 
     std::function<bool(ChessPiece &, SDL_Rect)> moveValid;
     void setType(std::string _type);

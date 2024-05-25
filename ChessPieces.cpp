@@ -92,9 +92,14 @@ void ChessPiece::setType(std::string _type)
         moveValid = pawnMoveValid;
     }
 
-    if (type == "rook")
+    else if (type == "rook")
     {
         moveValid = rookMoveValid;
+    }
+
+    else if (type == "bishop")
+    {
+        moveValid = bishopMoveValid;
     }
 }
 
@@ -165,6 +170,19 @@ bool ChessPiece::rookMoveValid(ChessPiece &piece, SDL_Rect currentTile)
     return currentTile.x == piece.originalTile.x || currentTile.y == piece.originalTile.y;
 }
 
+bool ChessPiece::bishopMoveValid(ChessPiece &piece, SDL_Rect currentTile)
+{
+    int denom = currentTile.x - piece.originalTile.x;
+
+    // Avoid divide by zero errors.
+    if (denom == 0)
+    {
+        return false;
+    }
+
+    return abs((currentTile.y - piece.originalTile.y) / denom) == 1;
+}
+
 void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_SIZE, int WINDOW_HEIGHT)
 {
     for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
@@ -183,7 +201,7 @@ void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_
 
     for (ChessPiece &piece : ChessPiece::chessPieceVector)
     {
-        piece.setType("rook");
+        piece.setType("bishop");
     }
 }
 
