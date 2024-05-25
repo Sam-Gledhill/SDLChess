@@ -19,6 +19,10 @@ ChessPiece::ChessPiece(SDL_Renderer *renderer, const char *imagePath, int xPos, 
     boundRect.h = height;
 }
 
+ChessPiece::ChessPiece()
+{
+}
+
 void ChessPiece::updatePosition(int x, int y)
 {
 
@@ -233,24 +237,41 @@ bool ChessPiece::kingMoveValid(ChessPiece &piece, SDL_Rect currentTile)
 
 void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_SIZE, int WINDOW_HEIGHT)
 {
+
+    // Setup pawns
     for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
     {
-        // For some reason passing the renderer through a local function causes a segfault here -so this cannot be abstracted for now.
         ChessPiece::chessPieceVector.push_back(
-            ChessPiece(rend, "blackpiece.png", i, 0, PIECE_SIZE, PIECE_SIZE, "black"));
-        ChessPiece::chessPieceVector.push_back(
-            ChessPiece(rend, "blackpiece.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "black"));
+            ChessPiece(rend, "PawnBlack.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "black"));
 
         ChessPiece::chessPieceVector.push_back(
-            ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white"));
-        ChessPiece::chessPieceVector.push_back(
-            ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
+            ChessPiece(rend, "PawnWhite.png", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
     }
 
+    // Have to do it like this otherwise it causes a segfault for some reason
     for (ChessPiece &piece : ChessPiece::chessPieceVector)
     {
-        piece.setType("king");
+        piece.setType("pawn");
     }
+
+    ChessPiece _piece;
+
+    // Adding rooks
+    _piece = ChessPiece(rend, "RookBlack.png", START, 0, PIECE_SIZE, PIECE_SIZE, "black");
+    _piece.setType("rook");
+    ChessPiece::chessPieceVector.push_back(_piece);
+
+    _piece = ChessPiece(rend, "RookBlack.png", START + 8 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
+    _piece.setType("rook");
+    ChessPiece::chessPieceVector.push_back(_piece);
+
+    _piece = ChessPiece(rend, "RookWhite.png", START, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
+    _piece.setType("rook");
+    ChessPiece::chessPieceVector.push_back(_piece);
+
+    _piece = ChessPiece(rend, "RookWhite.png", START + 8 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
+    _piece.setType("rook");
+    ChessPiece::chessPieceVector.push_back(_piece);
 }
 
 int ChessPiece::windowWidth;

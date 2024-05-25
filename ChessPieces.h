@@ -39,6 +39,7 @@ public:
     SDL_Texture *tex;
     SDL_Rect boundRect;
     ChessPiece(SDL_Renderer *renderer, const char *imagePath, int xPos, int yPos, int width, int height, std::string _team);
+    ChessPiece();
     ~ChessPiece(){};
     void updatePosition(int x, int y);
     void displace(int x, int y);
