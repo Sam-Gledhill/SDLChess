@@ -101,6 +101,11 @@ void ChessPiece::setType(std::string _type)
     {
         moveValid = bishopMoveValid;
     }
+
+    else if (type == "knight")
+    {
+        moveValid = knightMoveValid;
+    }
 }
 
 // Note for king, simulate moving every enemy piece on the board to the king
@@ -183,6 +188,14 @@ bool ChessPiece::bishopMoveValid(ChessPiece &piece, SDL_Rect currentTile)
     return abs((currentTile.y - piece.originalTile.y) / denom) == 1;
 }
 
+bool ChessPiece::knightMoveValid(ChessPiece &piece, SDL_Rect currentTile)
+{
+    int dx = currentTile.x - piece.originalTile.x;
+    int dy = currentTile.y - piece.originalTile.y;
+
+    return (abs(dx) == 2 * 50 && abs(dy) == 1 * 50) || (abs(dx) == 1 * 50 && abs(dy) == 2 * 50);
+}
+
 void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_SIZE, int WINDOW_HEIGHT)
 {
     for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
@@ -201,7 +214,7 @@ void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_
 
     for (ChessPiece &piece : ChessPiece::chessPieceVector)
     {
-        piece.setType("bishop");
+        piece.setType("knight");
     }
 }
 
