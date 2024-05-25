@@ -91,12 +91,24 @@ void ChessPiece::setType(std::string _type)
         // Instead of having checks for every piece type - just call the relevant piece.moveFunction()
         moveValid = pawnMoveValid;
     }
+
+    if (type == "rook")
+    {
+        moveValid = rookMoveValid;
+    }
 }
 
+// Note for king, simulate moving every enemy piece on the board to the king
+
 // Can probably abstract the move logic to another cpp file as passing in piece anyway.
-bool ChessPiece::pawnMoveValid(ChessPiece piece, SDL_Rect currentTile)
+bool ChessPiece::pawnMoveValid(ChessPiece &piece, SDL_Rect currentTile)
 {
     // Only managed to get the program working with this defined as a static function, so the piece has to be passed in.
+
+    if (piece.originalTile.x == currentTile.x && piece.originalTile.y == currentTile.y)
+    {
+        return false;
+    }
 
     int MULT = 1 + piece.firstTurn;
     bool validMove;
@@ -147,6 +159,12 @@ bool ChessPiece::pawnMoveValid(ChessPiece piece, SDL_Rect currentTile)
     return validMove;
 }
 
+bool ChessPiece::rookMoveValid(ChessPiece &piece, SDL_Rect currentTile)
+{
+    // Have to check if any pieces are between the start and end points
+    return currentTile.x == piece.originalTile.x || currentTile.y == piece.originalTile.y;
+}
+
 void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_SIZE, int WINDOW_HEIGHT)
 {
     for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
@@ -165,7 +183,7 @@ void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_
 
     for (ChessPiece &piece : ChessPiece::chessPieceVector)
     {
-        piece.setType("pawn");
+        piece.setType("rook");
     }
 }
 

@@ -18,9 +18,10 @@ public:
 
     // Wanted these to be private variables but caused segfault
     std::string type;
-    static bool pawnMoveValid(ChessPiece Piece, SDL_Rect currentTile);
+    static bool pawnMoveValid(ChessPiece &Piece, SDL_Rect currentTile);
+    static bool rookMoveValid(ChessPiece &Piece, SDL_Rect currentTile);
 
-    std::function<bool(ChessPiece, SDL_Rect)> moveValid;
+    std::function<bool(ChessPiece &, SDL_Rect)> moveValid;
     void setType(std::string _type);
 
     bool attacking;
