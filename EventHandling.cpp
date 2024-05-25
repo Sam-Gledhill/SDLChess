@@ -106,14 +106,14 @@ void EventHandler::handleMouseButtonDown()
             {
                 piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
             }
-
-            // Bandaid fix for multiple pieces having .isGrabbed true, find out why.
-            for (ChessPiece &piece : ChessPiece::chessPieceVector)
-            {
-                piece.isGrabbed = false;
-            }
-            anyPieceGrabbed = false;
         }
+
+        // Bandaid fix for multiple pieces having .isGrabbed true, find out why.
+        for (ChessPiece &piece : ChessPiece::chessPieceVector)
+        {
+            piece.isGrabbed = false;
+        }
+        anyPieceGrabbed = false;
     }
 
     else if (!anyPieceGrabbed)
