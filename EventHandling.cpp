@@ -78,11 +78,22 @@ void EventHandler::handleMouseButtonDown()
 
             if (index != -1)
             {
-                piece.attacking = true;
+                // Don't allow capturing of own pieces
+                if (piece.team == ChessPiece::chessPieceVector[index].team)
+                {
+                    // The piece being placed in its original tile is considered an invalid move
+                    piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
+                }
+
+                else
+                {
+                    piece.attacking = true;
+                }
             }
 
             if (piece.moveValid(piece, tile))
             {
+
                 piece.firstTurn = false;
                 piece.originalTile = tile;
                 if (piece.attacking)
