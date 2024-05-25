@@ -2,6 +2,7 @@
 
 ChessPiece::ChessPiece(SDL_Renderer *renderer, const char *imagePath, int xPos, int yPos, int width, int height, std::string _team)
 {
+    attacking = false;
     SDL_Surface *surface;
     firstTurn = true;
     team = _team;
@@ -82,6 +83,70 @@ void ChessPiece::initialiseTiles(int START, int PIECE_SIZE, int WINDOW_HEIGHT)
     }
 }
 
+void ChessPiece::setType(std::string _type)
+{
+    type = _type;
+    if (type == "pawn")
+    {
+        // Instead of having checks for every piece type - just call the relevant piece.moveFunction()
+        moveValid = pawnMoveValid;
+    }
+}
+
+// Can probably abstract the move logic to another cpp file as passing in piece anyway.
+bool ChessPiece::pawnMoveValid(ChessPiece piece, SDL_Rect currentTile)
+{
+    // Only managed to get the program working with this defined as a static function, so the piece has to be passed in.
+
+    int MULT = 1 + piece.firstTurn;
+    bool validMove;
+
+    // move without being on top of another tile
+    if (!piece.attacking)
+    {
+
+        if (piece.team == "black")
+        {
+            bool validBlackY = currentTile.y == (MULT * 50) + piece.originalTile.y || currentTile.y == 1 * 50 + piece.originalTile.y;
+            bool validBlackX = currentTile.x == piece.originalTile.x;
+
+            validMove = validBlackX && validBlackY;
+        }
+
+        else if (piece.team == "white")
+        {
+            bool validWhiteY = currentTile.y == -(MULT * 50) + piece.originalTile.y || currentTile.y == -1 * 50 + piece.originalTile.y;
+            bool validWhitex = currentTile.x == piece.originalTile.x;
+
+            validMove = validWhitex && validWhiteY;
+        }
+    }
+
+    else
+    {
+        if (piece.team == "black")
+        {
+            // Not doing en passant for now
+
+            bool validBlackY = currentTile.y == piece.originalTile.y + 50;
+            bool validBlackx = abs(piece.originalTile.x - currentTile.x) == 50;
+
+            validMove = validBlackx && validBlackY;
+        }
+        if (piece.team == "white")
+        {
+            // Not doing en passant for now
+            bool validWhiteY = currentTile.y == piece.originalTile.y - 50;
+            bool validWhiteX = abs(piece.originalTile.x - currentTile.x) == 50;
+            validMove = validWhiteX && validWhiteY;
+
+            std::cout << validWhiteX << validWhiteY << std::flush;
+        }
+    }
+
+    return validMove;
+}
+
 void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_SIZE, int WINDOW_HEIGHT)
 {
     for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
@@ -96,6 +161,11 @@ void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_
             ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white"));
         ChessPiece::chessPieceVector.push_back(
             ChessPiece(rend, "whitepiece.jpg", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
+    }
+
+    for (ChessPiece &piece : ChessPiece::chessPieceVector)
+    {
+        piece.setType("pawn");
     }
 }
 

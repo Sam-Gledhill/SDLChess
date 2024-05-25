@@ -76,68 +76,36 @@ void EventHandler::handleMouseButtonDown()
             // Bit of a janky way to do it but it works
             size_t index = piece.collidingWithOtherPiece(ChessPiece::chessPieceVector, ChessPiece::chessPieceVector.size() - 1);
 
-            int MULT = 1 + piece.firstTurn;
-
-            std::cout << MULT << "" << piece.firstTurn << std::endl;
-
-            bool validBlackY = tile.y == (MULT * 50) + piece.originalTile.y || tile.y == 1 * 50 + piece.originalTile.y;
-            bool validWhiteY = tile.y == (-MULT * 50) + piece.originalTile.y || tile.y == -1 * 50 + piece.originalTile.y;
-
-            if (piece.team == "black" && !(validBlackY && tile.x == piece.originalTile.x))
-            {
-                piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
-            }
-
-            else if (piece.team == "white" && (!validWhiteY && tile.x == piece.originalTile.x))
-            {
-                piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
-            }
-
-            else
-            {
-                piece.firstTurn = false;
-            }
-
             if (index != -1)
             {
-                if (piece.team == ChessPiece::chessPieceVector[index].team)
-                {
-                    std::cout << "Invalid move" << std::endl;
-                    piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
-                }
+                piece.attacking = true;
+            }
 
-                else
+            if (piece.moveValid(piece, tile))
+            {
+                piece.firstTurn = false;
+                piece.originalTile = tile;
+                if (piece.attacking)
                 {
-                    // Sometimes if a piece is captured on first move, pieces can still move two spaces.
-                    bool whiteAttackValid = (tile.y == piece.originalTile.y - 50) && (tile.x == piece.originalTile.x + 50 || tile.x == piece.originalTile.x - 50);
-                    bool blackAttackValid = (tile.y == piece.originalTile.y + 50) && (tile.x == piece.originalTile.x + 50 || tile.x == piece.originalTile.x - 50);
-                    if ((whiteAttackValid && piece.team == "white") || (blackAttackValid && piece.team == "black"))
-                    {
-                        std::cout << "Piece Captured" << std::endl;
-                        piece.updatePosition(tile.x, tile.y);
-                        ChessPiece::chessPieceVector.erase(ChessPiece::chessPieceVector.begin() + index);
-                        piece.originalTile = tile;
-                        piece.firstTurn = false;
-                    }
-
-                    else
-                    {
-                        std::cout << "Move Invalid";
-                        piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
-                    }
+                    piece.attacking = false;
+                    ChessPiece::chessPieceVector.erase(ChessPiece::chessPieceVector.begin() + index);
                 }
             }
-        }
+            else
+            {
+                piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
+            }
 
-        // Bandaid fix for multiple pieces having .isGrabbed true, find out why.
-        for (ChessPiece &piece : ChessPiece::chessPieceVector)
-        {
-            piece.isGrabbed = false;
+            // Bandaid fix for multiple pieces having .isGrabbed true, find out why.
+            for (ChessPiece &piece : ChessPiece::chessPieceVector)
+            {
+                piece.isGrabbed = false;
+            }
+            anyPieceGrabbed = false;
         }
-        anyPieceGrabbed = false;
     }
 
-    else
+    else if (!anyPieceGrabbed)
     {
         for (size_t i = 0; i < ChessPiece::chessPieceVector.size(); i++)
         {
