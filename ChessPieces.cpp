@@ -106,6 +106,16 @@ void ChessPiece::setType(std::string _type)
     {
         moveValid = knightMoveValid;
     }
+
+    else if (type == "queen")
+    {
+        moveValid = queenMoveValid;
+    }
+
+    else if (type == "king")
+    {
+        moveValid = kingMoveValid;
+    }
 }
 
 // Note for king, simulate moving every enemy piece on the board to the king
@@ -213,6 +223,14 @@ bool ChessPiece::queenMoveValid(ChessPiece &piece, SDL_Rect currentTile)
     return diagonalValid || straightValid;
 }
 
+bool ChessPiece::kingMoveValid(ChessPiece &piece, SDL_Rect currentTile)
+{
+    int dx = abs(currentTile.x - piece.originalTile.x);
+    int dy = abs(currentTile.y - piece.originalTile.y);
+
+    return (dx == 0 && dy == 1 * 50) || (dx == 1 * 50 && dy == 0) || (dx == 1 * 50 && dy == 1 * 50);
+}
+
 void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_SIZE, int WINDOW_HEIGHT)
 {
     for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
@@ -231,7 +249,7 @@ void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_
 
     for (ChessPiece &piece : ChessPiece::chessPieceVector)
     {
-        piece.setType("knight");
+        piece.setType("king");
     }
 }
 

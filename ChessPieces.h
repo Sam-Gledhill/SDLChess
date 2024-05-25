@@ -23,9 +23,9 @@ public:
     static bool bishopMoveValid(ChessPiece &piece, SDL_Rect currentTile);
     static bool knightMoveValid(ChessPiece &piece, SDL_Rect currentTile);
     static bool queenMoveValid(ChessPiece &piece, SDL_Rect currentTile);
+    static bool kingMoveValid(ChessPiece &piece, SDL_Rect currentTile);
 
-    std::function<bool(ChessPiece &, SDL_Rect)>
-        moveValid;
+    std::function<bool(ChessPiece &, SDL_Rect)> moveValid;
     void setType(std::string _type);
 
     bool attacking;
