@@ -244,10 +244,10 @@ void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_
     for (int i = START; i <= START + PIECE_SIZE * 7; i += PIECE_SIZE)
     {
         ChessPiece::chessPieceVector.push_back(
-            ChessPiece(rend, "PawnBlack.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "black"));
+            ChessPiece(rend, "Assets/PawnBlack.png", i, PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "black"));
 
         ChessPiece::chessPieceVector.push_back(
-            ChessPiece(rend, "PawnWhite.png", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
+            ChessPiece(rend, "Assets/PawnWhite.png", i, WINDOW_HEIGHT - (2 * PIECE_SIZE), PIECE_SIZE, PIECE_SIZE, "white"));
     }
 
     // Have to do it like this otherwise it causes a segfault for some reason
@@ -259,64 +259,64 @@ void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_
     ChessPiece _piece;
 
     // Adding rooks
-    _piece = ChessPiece(rend, "RookBlack.png", START, 0, PIECE_SIZE, PIECE_SIZE, "black");
+    _piece = ChessPiece(rend, "Assets/RookBlack.png", START, 0, PIECE_SIZE, PIECE_SIZE, "black");
     _piece.setType("rook");
     ChessPiece::chessPieceVector.push_back(_piece);
-    _piece = ChessPiece(rend, "RookBlack.png", START + 7 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
+    _piece = ChessPiece(rend, "Assets/RookBlack.png", START + 7 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
     _piece.setType("rook");
     ChessPiece::chessPieceVector.push_back(_piece);
-    _piece = ChessPiece(rend, "RookWhite.png", START, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
+    _piece = ChessPiece(rend, "Assets/RookWhite.png", START, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
     _piece.setType("rook");
     ChessPiece::chessPieceVector.push_back(_piece);
-    _piece = ChessPiece(rend, "RookWhite.png", START + 7 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
+    _piece = ChessPiece(rend, "Assets/RookWhite.png", START + 7 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
     _piece.setType("rook");
     ChessPiece::chessPieceVector.push_back(_piece);
 
     // Adding Knights
-    _piece = ChessPiece(rend, "KnightBlack.png", START + PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
+    _piece = ChessPiece(rend, "Assets/KnightBlack.png", START + PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
     ChessPiece::chessPieceVector.push_back(_piece);
     _piece.setType("knight");
-    _piece = ChessPiece(rend, "KnightBlack.png", START + 6 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
-    ChessPiece::chessPieceVector.push_back(_piece);
-    _piece.setType("knight");
-    ChessPiece::chessPieceVector.push_back(_piece);
-    _piece = ChessPiece(rend, "KnightWhite.png", START + PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
+    _piece = ChessPiece(rend, "Assets/KnightBlack.png", START + 6 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
     ChessPiece::chessPieceVector.push_back(_piece);
     _piece.setType("knight");
     ChessPiece::chessPieceVector.push_back(_piece);
-    _piece = ChessPiece(rend, "KnightWhite.png", START + 6 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
+    _piece = ChessPiece(rend, "Assets/KnightWhite.png", START + PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
+    ChessPiece::chessPieceVector.push_back(_piece);
+    _piece.setType("knight");
+    ChessPiece::chessPieceVector.push_back(_piece);
+    _piece = ChessPiece(rend, "Assets/KnightWhite.png", START + 6 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
     ChessPiece::chessPieceVector.push_back(_piece);
     _piece.setType("knight");
 
     // Adding bishops
-    _piece = ChessPiece(rend, "BishopBlack.png", START + 2 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
+    _piece = ChessPiece(rend, "Assets/BishopBlack.png", START + 2 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
     ChessPiece::chessPieceVector.push_back(_piece);
     _piece.setType("bishop");
-    _piece = ChessPiece(rend, "BishopBlack.png", START + 5 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
-    ChessPiece::chessPieceVector.push_back(_piece);
-    _piece.setType("bishop");
-    ChessPiece::chessPieceVector.push_back(_piece);
-    _piece = ChessPiece(rend, "BishopWhite.png", START + 2 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
+    _piece = ChessPiece(rend, "Assets/BishopBlack.png", START + 5 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
     ChessPiece::chessPieceVector.push_back(_piece);
     _piece.setType("bishop");
     ChessPiece::chessPieceVector.push_back(_piece);
-    _piece = ChessPiece(rend, "BishopWhite.png", START + 5 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
+    _piece = ChessPiece(rend, "Assets/BishopWhite.png", START + 2 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
+    ChessPiece::chessPieceVector.push_back(_piece);
+    _piece.setType("bishop");
+    ChessPiece::chessPieceVector.push_back(_piece);
+    _piece = ChessPiece(rend, "Assets/BishopWhite.png", START + 5 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
     ChessPiece::chessPieceVector.push_back(_piece);
     _piece.setType("bishop");
 
     // Adding queens
-    _piece = ChessPiece(rend, "QueenBlack.png", START + 3 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
+    _piece = ChessPiece(rend, "Assets/QueenBlack.png", START + 3 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
     ChessPiece::chessPieceVector.push_back(_piece);
     _piece.setType("queen");
-    _piece = ChessPiece(rend, "QueenWhite.png", START + 3 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
+    _piece = ChessPiece(rend, "Assets/QueenWhite.png", START + 3 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
     ChessPiece::chessPieceVector.push_back(_piece);
     _piece.setType("queen");
 
     // Adding kings
-    _piece = ChessPiece(rend, "KingBlack.png", START + 4 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
+    _piece = ChessPiece(rend, "Assets/KingBlack.png", START + 4 * PIECE_SIZE, 0, PIECE_SIZE, PIECE_SIZE, "black");
     ChessPiece::chessPieceVector.push_back(_piece);
     _piece.setType("king");
-    _piece = ChessPiece(rend, "KingWhite.png", START + 4 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
+    _piece = ChessPiece(rend, "Assets/KingWhite.png", START + 4 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
     ChessPiece::chessPieceVector.push_back(_piece);
     _piece.setType("king");
 }
