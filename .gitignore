@@ -7,3 +7,5 @@ main
 .vscode/settings.json
 blackpiece.png
 whitepiece.jpg
+*.png
+*.jpg
