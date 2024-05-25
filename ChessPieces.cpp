@@ -196,6 +196,23 @@ bool ChessPiece::knightMoveValid(ChessPiece &piece, SDL_Rect currentTile)
     return (abs(dx) == 2 * 50 && abs(dy) == 1 * 50) || (abs(dx) == 1 * 50 && abs(dy) == 2 * 50);
 }
 
+bool ChessPiece::queenMoveValid(ChessPiece &piece, SDL_Rect currentTile)
+{
+    int denom = currentTile.x - piece.originalTile.x;
+
+    // Avoid divide by zero errors.
+    if (denom == 0)
+    {
+        return false;
+    }
+
+    bool diagonalValid = abs((currentTile.y - piece.originalTile.y) / denom) == 1;
+
+    bool straightValid = currentTile.x == piece.originalTile.x || currentTile.y == piece.originalTile.y;
+
+    return diagonalValid || straightValid;
+}
+
 void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_SIZE, int WINDOW_HEIGHT)
 {
     for (int i = START; i <= START + PIECE_SIZE * 8; i += PIECE_SIZE)
