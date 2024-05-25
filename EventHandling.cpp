@@ -58,6 +58,7 @@ void EventHandler::handleMouseButtonDown()
 
     if (anyPieceGrabbed)
     {
+        // Grab final piece in stack. Would've been put there to be drawn on top.
         ChessPiece &piece = ChessPiece::chessPieceVector.back();
 
         // Pass in pointer instead of passing in whole vector
@@ -72,25 +73,38 @@ void EventHandler::handleMouseButtonDown()
         else
         {
             piece.updatePosition(tile.x, tile.y);
-
             // Bit of a janky way to do it but it works
             size_t index = piece.collidingWithOtherPiece(ChessPiece::chessPieceVector, ChessPiece::chessPieceVector.size() - 1);
 
             if (index != -1)
             {
-
+                // Don't allow capturing of own pieces
                 if (piece.team == ChessPiece::chessPieceVector[index].team)
                 {
-                    std::cout << "Invalid move" << std::endl;
+                    // The piece being placed in its original tile is considered an invalid move
                     piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
                 }
+
                 else
                 {
-                    std::cout << "Piece Captured" << std::endl;
-                    piece.updatePosition(tile.x, tile.y);
-                    ChessPiece::chessPieceVector.erase(ChessPiece::chessPieceVector.begin() + index);
-                    piece.originalTile = tile;
+                    piece.attacking = true;
                 }
+            }
+
+            if (piece.moveValid(piece, tile))
+            {
+
+                piece.firstTurn = false;
+                piece.originalTile = tile;
+                if (piece.attacking)
+                {
+                    piece.attacking = false;
+                    ChessPiece::chessPieceVector.erase(ChessPiece::chessPieceVector.begin() + index);
+                }
+            }
+            else
+            {
+                piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
             }
         }
 
@@ -102,7 +116,7 @@ void EventHandler::handleMouseButtonDown()
         anyPieceGrabbed = false;
     }
 
-    else
+    else if (!anyPieceGrabbed)
     {
         for (size_t i = 0; i < ChessPiece::chessPieceVector.size(); i++)
         {
