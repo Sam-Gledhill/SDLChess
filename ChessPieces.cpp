@@ -213,14 +213,19 @@ bool ChessPiece::knightMoveValid(ChessPiece &piece, SDL_Rect currentTile)
 bool ChessPiece::queenMoveValid(ChessPiece &piece, SDL_Rect currentTile)
 {
     int denom = currentTile.x - piece.originalTile.x;
+    int num = currentTile.y - piece.originalTile.y;
+    bool diagonalValid;
 
     // Avoid divide by zero errors.
     if (denom == 0)
     {
-        return false;
+        diagonalValid = false;
     }
 
-    bool diagonalValid = abs((currentTile.y - piece.originalTile.y) / denom) == 1;
+    else
+    {
+        diagonalValid = abs(num / denom) == 1;
+    }
 
     bool straightValid = currentTile.x == piece.originalTile.x || currentTile.y == piece.originalTile.y;
 
