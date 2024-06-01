@@ -24,6 +24,7 @@ public:
     static bool knightMoveValid(ChessPiece &piece, SDL_Rect currentTile);
     static bool queenMoveValid(ChessPiece &piece, SDL_Rect currentTile);
     static bool kingMoveValid(ChessPiece &piece, SDL_Rect currentTile);
+    static void addPieceToBoard(ChessPiece &piece, std::string pieceType);
 
     std::function<bool(ChessPiece &, SDL_Rect)> moveValid;
     void setType(std::string _type);
