@@ -44,13 +44,9 @@ SDL_bool ChessPiece::clickedInRect(SDL_Point *p)
     return SDL_PointInRect(p, &boundRect);
 }
 
-void ChessPiece::displace(int x, int y)
-{
-    updatePosition(boundRect.x + x, boundRect.y + y);
-}
-
 size_t ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector, size_t currentIndex)
 {
+    // This should be refactored to get rid of the chessVector passthrough
 
     for (size_t i = 0; i < chessVector.size(); i++)
     {
@@ -70,6 +66,10 @@ size_t ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector, 
     }
 
     return -1;
+}
+
+void ChessPiece::setOriginalTile()
+{
 }
 
 void ChessPiece::initialiseTiles(int START, int PIECE_SIZE, int WINDOW_HEIGHT)
