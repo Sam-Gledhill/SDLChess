@@ -70,6 +70,16 @@ size_t ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector, 
 
 void ChessPiece::setOriginalTile()
 {
+    for (std::vector<SDL_Rect> &column : chessTiles2d)
+    {
+        for (SDL_Rect &tile : column)
+        {
+            if (SDL_HasIntersection(&boundRect, &tile))
+            {
+                originalTile = tile;
+            }
+        }
+    }
 }
 
 void ChessPiece::initialiseTiles(int START, int PIECE_SIZE, int WINDOW_HEIGHT)
@@ -321,6 +331,12 @@ void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_
 
     _piece = ChessPiece(rend, "Assets/KingWhite.png", START + 4 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
     addPieceToBoard(_piece, "king");
+
+    // Pieces know their original piece even though they haven't been assigned - troubleshoot
+    for (ChessPiece &piece : ChessPiece::chessPieceVector)
+    {
+        piece.setOriginalTile();
+    }
 }
 
 int ChessPiece::windowWidth;
