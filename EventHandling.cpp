@@ -54,71 +54,82 @@ void EventHandler::handleEvent(SDL_Event &event)
 
 void EventHandler::handleMouseButtonDown()
 {
-    SDL_GetMouseState(&mousePos.x, &mousePos.y);
 
     if (anyPieceGrabbed)
     {
-        // Grab final piece in stack. Would've been put there to be drawn on top.
-        ChessPiece &piece = ChessPiece::chessPieceVector.back();
-
-        // Pass in pointer instead of passing in whole vector
-        SDL_Rect tile = grabTileUnderCursor(mousePos);
-
-        // If piece is dragged somewhere that is not a tile.
-        if (SDL_RectEmpty(&tile))
-        {
-            piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
-        }
-
-        else
-        {
-            piece.updatePosition(tile.x, tile.y);
-            // Bit of a janky way to do it but it works
-            size_t index = piece.collidingWithOtherPiece(ChessPiece::chessPieceVector, ChessPiece::chessPieceVector.size() - 1);
-
-            if (index != -1)
-            {
-                // Don't allow capturing of own pieces
-                if (piece.team == ChessPiece::chessPieceVector[index].team)
-                {
-                    // The piece being placed in its original tile is considered an invalid move
-                    piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
-                }
-
-                else
-                {
-                    piece.attacking = true;
-                }
+        handlePutDownPiece();
             }
-
-            if (piece.moveValid(piece, tile))
-            {
-
-                piece.firstTurn = false;
-                piece.originalTile = tile;
-                if (piece.attacking)
-                {
-                    piece.attacking = false;
-                    ChessPiece::chessPieceVector.erase(ChessPiece::chessPieceVector.begin() + index);
-                }
-            }
-            else
-            {
-                piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
-            }
-        }
-
-        // Bandaid fix for multiple pieces having .isGrabbed true, find out why.
-        for (ChessPiece &piece : ChessPiece::chessPieceVector)
-        {
-            piece.isGrabbed = false;
-        }
-        anyPieceGrabbed = false;
-    }
 
     else if (!anyPieceGrabbed)
     {
-        for (size_t i = 0; i < ChessPiece::chessPieceVector.size(); i++)
+        handlePickUpPiece();
+    }
+}
+
+void EventHandler::handlePutDownPiece(){
+    SDL_GetMouseState(&mousePos.x, &mousePos.y);
+    // Grab final piece in stack. Would've been put there to be drawn on top.
+    ChessPiece &piece = ChessPiece::chessPieceVector.back();
+
+    // Pass in pointer instead of passing in whole vector
+    SDL_Rect tile = grabTileUnderCursor(mousePos);
+
+    // If piece is dragged somewhere that is not a tile.
+    if (SDL_RectEmpty(&tile))
+    {
+        piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
+    }
+
+    else
+    {
+        piece.updatePosition(tile.x, tile.y);
+        // Bit of a janky way to do it but it works
+        size_t index = piece.collidingWithOtherPiece(ChessPiece::chessPieceVector, ChessPiece::chessPieceVector.size() - 1);
+
+        if (index != -1)
+        {
+            // Don't allow capturing of own pieces
+            if (piece.team == ChessPiece::chessPieceVector[index].team)
+            {
+                // The piece being placed in its original tile is considered an invalid move
+                piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
+            }
+
+            else
+            {
+                piece.attacking = true;
+            }
+        }
+
+        if (piece.moveValid(piece, tile))
+        {
+
+            piece.firstTurn = false;
+            piece.originalTile = tile;
+            if (piece.attacking)
+            {
+                piece.attacking = false;
+                ChessPiece::chessPieceVector.erase(ChessPiece::chessPieceVector.begin() + index);
+            }
+        }
+        else
+        {
+            piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
+        }
+    }
+
+    // Bandaid fix for multiple pieces having .isGrabbed true, find out why.
+    for (ChessPiece &piece : ChessPiece::chessPieceVector)
+    {
+        piece.isGrabbed = false;
+    }
+    anyPieceGrabbed = false;
+
+}
+
+void EventHandler::handlePickUpPiece(){
+    SDL_GetMouseState(&mousePos.x, &mousePos.y);
+    for (size_t i = 0; i < ChessPiece::chessPieceVector.size(); i++)
         {
 
             // Use references or piece information doesn't update properly.
@@ -137,8 +148,8 @@ void EventHandler::handleMouseButtonDown()
                 break;
             }
         }
-    }
 }
+
 
 void EventHandler::handleMouseMotion()
 {

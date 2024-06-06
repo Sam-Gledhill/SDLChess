@@ -16,6 +16,8 @@ public:
     void handleMouseMotion();
     void handleEvent(SDL_Event &event);
     void handleMouseButtonDown();
+    void handlePutDownPiece();
+    void handlePickUpPiece();
 };
 
 #endif
