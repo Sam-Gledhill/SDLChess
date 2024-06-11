@@ -103,53 +103,37 @@ void EventHandler::handlePutDownPiece(){
 
         if (piece.moveValid(piece, tile))
         {
-            
-            //Check if move collides with any other pieces
-
-            //If x or y coords unchanged, it's a straight line check
-
-            //If x and y coords changed, it's a diagonal line check
-
-            //Make exception for knight moves - should have no exceptions - can jump over pieces
-
-            int dx = tile.x - piece.originalTile.x;
-            int dy = tile.y - piece.originalTile.y;
-
-            // std::cout << dx << "" << dy << std::endl;
 
             bool invalidPath = false;
 
-            if (dy != 0){
+            if (piece.type != "knight"){
+                int dx = tile.x - piece.originalTile.x;
+                int dy = tile.y - piece.originalTile.y;
 
-                // std::cout << "Hello" << std::endl;
+                int dxSign = dx/abs(dx);
+                int dySign = dy/abs(dy);
+
+                int TILE_SIZE = 50;
 
                 SDL_Point p;
 
-                p.x = tile.x;
-                
-                //Silly way of doing this
-                for (int _y = tile.y; _y >=0; _y-=50){
-                    
-                    p.y = _y;
+                //Checks the space between original piece position and desired destination. Sets invalidPath to true if a piece has been jumped over.
+                for(int i=1; i< std::max(abs(dx)/TILE_SIZE,abs(dy)/TILE_SIZE); i++){
 
-                    for(size_t i = 0; i<ChessPiece::chessPieceVector.size(); i++){
-                        
-                        if(ChessPiece::chessPieceVector[i].clickedInRect(&p)){
+                    p.x = piece.originalTile.x + dxSign*(TILE_SIZE*i);
+                    p.y = piece.originalTile.y + dySign*(TILE_SIZE*i);
 
-                            std::cout << "Invalid Move";
+                    for(ChessPiece& otherPiece: ChessPiece::chessPieceVector){
+                        if(otherPiece.clickedInRect(&p)){
                             invalidPath = true;
-                            piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
                         }
-
                     }
                 }
-                std::cout << "\n\n" << std::endl;
-
             }
-
 
             if (invalidPath){
                 piece.attacking = false;
+                piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
             }
 
             else{
