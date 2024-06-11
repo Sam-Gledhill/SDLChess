@@ -44,13 +44,9 @@ SDL_bool ChessPiece::clickedInRect(SDL_Point *p)
     return SDL_PointInRect(p, &boundRect);
 }
 
-void ChessPiece::displace(int x, int y)
-{
-    updatePosition(boundRect.x + x, boundRect.y + y);
-}
-
 size_t ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector, size_t currentIndex)
 {
+    // This should be refactored to get rid of the chessVector passthrough
 
     for (size_t i = 0; i < chessVector.size(); i++)
     {
@@ -70,6 +66,20 @@ size_t ChessPiece::collidingWithOtherPiece(std::vector<ChessPiece> chessVector, 
     }
 
     return -1;
+}
+
+void ChessPiece::setOriginalTile()
+{
+    for (std::vector<SDL_Rect> &column : chessTiles2d)
+    {
+        for (SDL_Rect &tile : column)
+        {
+            if (SDL_HasIntersection(&boundRect, &tile))
+            {
+                originalTile = tile;
+            }
+        }
+    }
 }
 
 void ChessPiece::initialiseTiles(int START, int PIECE_SIZE, int WINDOW_HEIGHT)
@@ -127,8 +137,6 @@ void ChessPiece::setType(std::string _type)
 // Can probably abstract the move logic to another cpp file as passing in piece anyway.
 bool ChessPiece::pawnMoveValid(ChessPiece &piece, SDL_Rect currentTile)
 {
-    // Only managed to get the program working with this defined as a static function, so the piece has to be passed in.
-
     if (piece.originalTile.x == currentTile.x && piece.originalTile.y == currentTile.y)
     {
         return false;
@@ -176,7 +184,7 @@ bool ChessPiece::pawnMoveValid(ChessPiece &piece, SDL_Rect currentTile)
             bool validWhiteX = abs(piece.originalTile.x - currentTile.x) == 50;
             validMove = validWhiteX && validWhiteY;
 
-            std::cout << validWhiteX << validWhiteY << std::flush;
+            // std::cout << validWhiteX << validWhiteY << std::flush;
         }
     }
 
@@ -321,6 +329,11 @@ void ChessPiece::initialiseChessPieces(SDL_Renderer *rend, int START, int PIECE_
 
     _piece = ChessPiece(rend, "Assets/KingWhite.png", START + 4 * PIECE_SIZE, WINDOW_HEIGHT - PIECE_SIZE, PIECE_SIZE, PIECE_SIZE, "white");
     addPieceToBoard(_piece, "king");
+
+    for (ChessPiece &piece : ChessPiece::chessPieceVector)
+    {
+        piece.setOriginalTile();
+    }
 }
 
 int ChessPiece::windowWidth;

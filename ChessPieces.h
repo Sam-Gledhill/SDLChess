@@ -43,7 +43,7 @@ public:
     ChessPiece();
     ~ChessPiece(){};
     void updatePosition(int x, int y);
-    void displace(int x, int y);
+    void setOriginalTile();
     SDL_bool clickedInRect(SDL_Point *p);
     size_t collidingWithOtherPiece(std::vector<ChessPiece> chessVector, size_t currentIndex);
 };
