@@ -103,35 +103,17 @@ void EventHandler::handlePutDownPiece(){
 
         if (piece.moveValid(piece, tile))
         {
+            bool validPath = false;
 
-            bool invalidPath = false;
-
-            if (piece.type != "knight"){
-                int dx = tile.x - piece.originalTile.x;
-                int dy = tile.y - piece.originalTile.y;
-
-                int dxSign = dx/abs(dx);
-                int dySign = dy/abs(dy);
-
-                int TILE_SIZE = 50;
-
-                SDL_Point p;
-
-                //Checks the space between original piece position and desired destination. Sets invalidPath to true if a piece has been jumped over.
-                for(int i=1; i< std::max(abs(dx)/TILE_SIZE,abs(dy)/TILE_SIZE); i++){
-
-                    p.x = piece.originalTile.x + dxSign*(TILE_SIZE*i);
-                    p.y = piece.originalTile.y + dySign*(TILE_SIZE*i);
-
-                    for(ChessPiece& otherPiece: ChessPiece::chessPieceVector){
-                        if(otherPiece.clickedInRect(&p)){
-                            invalidPath = true;
-                        }
-                    }
-                }
+            if (piece.type == "knight"){
+                validPath = true;
             }
+            else{
+                validPath = checkValidPathToDest(piece.originalTile,tile);
+            } 
+            
 
-            if (invalidPath){
+            if (!validPath){
                 piece.attacking = false;
                 piece.updatePosition(piece.originalTile.x, piece.originalTile.y);
             }
@@ -159,6 +141,36 @@ void EventHandler::handlePutDownPiece(){
         piece.isGrabbed = false;
     }
     anyPieceGrabbed = false;
+
+}
+
+bool EventHandler::checkValidPathToDest(SDL_Rect originalTile, SDL_Rect destinationTile){
+   
+    int dx = destinationTile.x - originalTile.x;
+    int dy = destinationTile.y - originalTile.y;
+
+    int dxSign = dx/abs(dx);
+    int dySign = dy/abs(dy);
+
+    int TILE_SIZE = 50;
+
+    SDL_Point p;
+
+    //Checks the space between original piece position and desired destination. Sets validPath to true if a piece has been jumped over.
+    //Gives invalid move if moving > 1 tile behind a friendly piece
+    for(int i=1; i< std::max(abs(dx)/TILE_SIZE,abs(dy)/TILE_SIZE); i++){
+
+        p.x = originalTile.x + dxSign*(TILE_SIZE*i);
+        p.y = originalTile.y + dySign*(TILE_SIZE*i);
+
+        for(ChessPiece& otherPiece: ChessPiece::chessPieceVector){
+            if(otherPiece.clickedInRect(&p)){
+                return false;
+            }
+        }
+    }
+
+    return true;
 
 }
 
