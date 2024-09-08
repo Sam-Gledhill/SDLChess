@@ -7,7 +7,7 @@ EventHandler::EventHandler()
     exit = false;
 }
 
-SDL_Rect EventHandler::grabTileUnderCursor(SDL_Point mousePosition)
+SDL_Rect EventHandler::getTileUnderCursor(SDL_Point mousePosition)
 {
     for (auto &column : ChessPiece::chessTiles2d)
     {
@@ -71,7 +71,7 @@ void EventHandler::handlePutDownPiece(){
     // Grab final piece in stack. Would've been put there to be drawn on top.
     ChessPiece &piece = ChessPiece::chessPieceVector.back();
 
-    SDL_Rect tile = grabTileUnderCursor(mousePos);
+    SDL_Rect tile = getTileUnderCursor(mousePos);
 
     // If piece is dragged somewhere that is not a tile.
     if (SDL_RectEmpty(&tile))

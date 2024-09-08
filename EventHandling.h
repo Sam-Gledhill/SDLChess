@@ -12,7 +12,7 @@ public:
     bool anyPieceGrabbed;
     SDL_Point mousePos;
     EventHandler();
-    SDL_Rect grabTileUnderCursor(SDL_Point mousePosition);
+    SDL_Rect getTileUnderCursor(SDL_Point mousePosition);
     bool checkValidPathToDest(SDL_Rect originalTile, SDL_Rect destinationTile);
     void handleMouseMotion();
     void handleEvent(SDL_Event &event);
