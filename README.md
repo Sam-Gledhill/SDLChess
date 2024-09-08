@@ -3,6 +3,7 @@
 Mostly finished chess game - written in C++ using SDL2.
 
 To do:
+*   Fix bug where moves are being falsely invalidated when moving multiple tiles near pawns.
 *   Detect check/checkmate situations.
 *   Limit FPS.
 *   Add turns - alternate black and white moves.
