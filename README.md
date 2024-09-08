@@ -2,7 +2,8 @@
 
 Mostly finished chess game - written in C++ using SDL2.
 
-![DemoImage](https://github.com/user-attachments/assets/8d850518-5bc0-4edd-bce4-82de50e08310)
+![Demo Image](https://github.com/user-attachments/assets/a7714546-bae6-4f80-8f20-fff87b71cd31)
+
 
 
 To do:
